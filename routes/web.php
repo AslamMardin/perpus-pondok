@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\PeminjamanController;
 
@@ -42,9 +43,16 @@ Route::resource('/pengembalian', BookController::class)->parameters([
     'pengembalian' => 'pengembalian' // agar route binding cocok dengan variabel $buku
 ]);
 
-Route::resource('/laporan', BookController::class)->parameters([
-    'laporan' => 'laporan' // agar route binding cocok dengan variabel $buku
-]);
+Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+Route::post('/laporan/filter', [LaporanController::class, 'filter'])->name('laporan.filter');
+Route::prefix('laporan')->name('laporan.')->group(function () {
+    Route::get('/peminjaman', [LaporanController::class, 'peminjaman'])->name('peminjaman');
+    Route::get('/pengembalian', [LaporanController::class, 'pengembalian'])->name('pengembalian');
+    Route::get('/terlambat', [LaporanController::class, 'terlambat'])->name('terlambat');
+    Route::get('/tanggal', [LaporanController::class, 'tanggal'])->name('tanggal');
+    Route::get('/santri', [LaporanController::class, 'santri'])->name('santri');
+});
+    
  Route::get('/pengaturan', [AdminController::class, 'pengaturan'])->name('pengaturan');
   Route::post('/pengaturan', [AdminController::class, 'updatePengaturan'])->name('pengaturan.update');
 });

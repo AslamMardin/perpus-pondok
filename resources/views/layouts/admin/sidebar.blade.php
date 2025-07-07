@@ -19,12 +19,38 @@
         href="{{ route('riwayat.pengembalian') }}">
         <i class="fas fa-undo-alt"></i> Pengembalian
     </a>
-    <a class="nav-link {{ request()->routeIs('laporan.*') ? 'active' : '' }}" href="{{ route('laporan.index') }}">
-        <i class="fas fa-chart-bar"></i>
+    <a class="nav-link {{ request()->routeIs('laporan.*') ? 'active' : '' }}" href="{{ route('laporan.index') }}"
+        title="Lihat laporan peminjaman buku">
+        <i class="fas fa-chart-bar me-2"></i>
         Laporan
     </a>
-    <a class="nav-link {{ request()->routeIs('pengaturan') ? 'active' : '' }}" href="{{ route('pengaturan') }}">
-        <i class="fas fa-cog"></i>
-        Pengaturan
-    </a>
+
+    <!-- Laporan dengan submenu -->
+
+
+    <div class="collapse {{ request()->routeIs('laporan.*') ? 'show' : '' }}" id="submenuLaporan">
+        <nav class="nav flex-column ms-4">
+            <a class="nav-link {{ request()->routeIs('laporan.peminjaman') ? 'active' : '' }}"
+                href="{{ route('laporan.peminjaman') }}">
+                Laporan Peminjaman
+            </a>
+            <a class="nav-link {{ request()->routeIs('laporan.pengembalian') ? 'active' : '' }}"
+                href="{{ route('laporan.pengembalian') }}">
+                Laporan Pengembalian
+            </a>
+            <a class="nav-link {{ request()->routeIs('laporan.terlambat') ? 'active' : '' }}"
+                href="{{ route('laporan.terlambat') }}">
+                Laporan Terlambat
+            </a>
+            <a class="nav-link {{ request()->routeIs('laporan.tanggal') ? 'active' : '' }}"
+                href="{{ route('laporan.tanggal') }}">
+                Berdasarkan Tanggal/Bulan/Tahun
+            </a>
+            <a class="nav-link {{ request()->routeIs('laporan.santri') ? 'active' : '' }}"
+                href="{{ route('laporan.santri') }}">
+                Per Santri / Per Buku
+            </a>
+        </nav>
+    </div>
+
 </nav>

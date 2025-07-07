@@ -1,32 +1,33 @@
 @extends('layouts.admin')
 
-@section('title', 'Laporan Berdasarkan Tanggal')
+@section('title', 'Laporan Per Santri')
 
 @section('content')
     <div class="page-header">
-        <h4 class="mb-0">Laporan Berdasarkan Tanggal</h4>
-        <p class="text-muted">Filter laporan peminjaman buku berdasarkan rentang waktu.</p>
+        <h4 class="mb-0">Laporan Per Santri</h4>
+        <p class="text-muted">Tampilkan data peminjaman berdasarkan nama santri.</p>
     </div>
 
     {{-- Form Filter --}}
     <div class="card mb-3">
         <div class="card-body">
-            <form method="POST" action="{{ route('laporan.tanggal.filter') }}">
+            <form method="POST" action="{{ route('laporan.santri.filter') }}">
                 @csrf
                 <div class="row g-3 align-items-end">
-                    <div class="col-md-5">
-                        <label class="form-label">Tanggal Awal</label>
-                        <input type="date" name="tanggal_mulai" class="form-control"
-                            value="{{ old('tanggal_mulai', $tanggal_mulai ?? '') }}" required>
-                    </div>
-                    <div class="col-md-5">
-                        <label class="form-label">Tanggal Akhir</label>
-                        <input type="date" name="tanggal_selesai" class="form-control"
-                            value="{{ old('tanggal_selesai', $tanggal_selesai ?? '') }}" required>
+                    <div class="col-md-10">
+                        <label class="form-label">Pilih Santri</label>
+                        <select name="user_id" class="form-select" required>
+                            <option value="">-- Pilih Santri --</option>
+                            @foreach ($santriList as $santri)
+                                <option value="{{ $santri->id }}" {{ old('user_id') == $santri->id ? 'selected' : '' }}>
+                                    {{ $santri->nama }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="col-md-2">
                         <button type="submit" class="btn btn-primary w-100">
-                            <i class="fas fa-filter me-1"></i> Filter
+                            <i class="fas fa-search me-1"></i> Tampilkan
                         </button>
                     </div>
                 </div>
@@ -34,29 +35,14 @@
         </div>
     </div>
 
-    {{-- Tabel Laporan --}}
+    {{-- Tabel Data --}}
     @if (!empty($loans))
         <div class="card">
             <div class="card-body table-responsive">
-
-                {{-- Tombol Export --}}
-                <div class="mb-3">
-                    <a href="{{ route('laporan.tanggal.pdf', ['dari' => $tanggal_mulai, 'sampai' => $tanggal_selesai]) }}"
-                        class="btn btn-danger btn-sm" target="_blank">
-                        <i class="fas fa-file-pdf"></i> Export PDF
-                    </a>
-                    <a href="{{ route('laporan.tanggal.excel', ['dari' => $tanggal_mulai, 'sampai' => $tanggal_selesai]) }}"
-                        class="btn btn-success btn-sm">
-                        <i class="fas fa-file-excel"></i> Export Excel
-                    </a>
-                </div>
-
-                {{-- Tabel Data --}}
                 <table class="table table-hover table-bordered">
                     <thead class="table-light">
                         <tr>
                             <th>#</th>
-                            <th>Nama Santri</th>
                             <th>Judul Buku</th>
                             <th>Tanggal Pinjam</th>
                             <th>Tanggal Tenggat</th>
@@ -69,7 +55,6 @@
                         @forelse ($loans as $i => $loan)
                             <tr>
                                 <td>{{ $i + 1 }}</td>
-                                <td>{{ $loan->user->nama }}</td>
                                 <td>{{ $loan->book->judul }}</td>
                                 <td>{{ \Carbon\Carbon::parse($loan->tanggal_pinjam)->translatedFormat('d F Y') }}</td>
                                 <td>{{ \Carbon\Carbon::parse($loan->tanggal_tenggat)->translatedFormat('d F Y') }}</td>
@@ -95,8 +80,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center text-muted">Tidak ada data peminjaman dalam rentang
-                                    tanggal ini.</td>
+                                <td colspan="7" class="text-center text-muted">Tidak ada data peminjaman.</td>
                             </tr>
                         @endforelse
                     </tbody>

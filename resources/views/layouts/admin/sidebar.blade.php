@@ -19,13 +19,15 @@
         href="{{ route('riwayat.pengembalian') }}">
         <i class="fas fa-undo-alt"></i> Pengembalian
     </a>
-    <a class="nav-link {{ request()->routeIs('laporan.*') ? 'active' : '' }}" href="{{ route('laporan.index') }}"
-        title="Lihat laporan peminjaman buku">
+    <!-- Menu Laporan -->
+    <a class="nav-link {{ request()->routeIs('laporan.*') ? 'active' : '' }}" data-bs-toggle="collapse"
+        href="#submenuLaporan" role="button" aria-expanded="{{ request()->routeIs('laporan.*') ? 'true' : 'false' }}"
+        aria-controls="submenuLaporan" title="Lihat laporan peminjaman buku">
         <i class="fas fa-chart-bar me-2"></i>
         Laporan
     </a>
 
-    <!-- Laporan dengan submenu -->
+    <!-- Submenu Laporan -->
     <div class="collapse {{ request()->routeIs('laporan.*') ? 'show' : '' }}" id="submenuLaporan">
         <nav class="nav flex-column ms-4">
             <a class="nav-link {{ request()->routeIs('laporan.peminjaman') ? 'active' : '' }}"
@@ -50,5 +52,6 @@
             </a>
         </nav>
     </div>
+
 
 </nav>

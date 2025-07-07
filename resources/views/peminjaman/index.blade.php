@@ -1,4 +1,5 @@
 @extends('layouts.admin')
+
 @section('title', 'Daftar Peminjaman')
 
 @section('content')
@@ -7,12 +8,9 @@
         <p class="text-white-50">Manajemen peminjaman buku oleh santri</p>
     </div>
 
-
-
-    <!-- Form Filter dan Tombol Catat dalam 1 baris -->
+    {{-- Filter dan Tombol Catat --}}
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-
-        <!-- Form Filter -->
+        {{-- Form Filter --}}
         <form method="GET" action="{{ route('peminjaman.index') }}" class="d-flex align-items-center gap-2">
             <select name="filter" class="form-select w-auto">
                 <option value="">-- Semua Status --</option>
@@ -24,22 +22,24 @@
             <button type="submit" class="btn btn-outline-success btn-sm">Filter</button>
         </form>
 
-        <!-- Tombol Catat Peminjaman -->
+        {{-- Tombol Catat --}}
         <a href="{{ route('peminjaman.create') }}" class="btn btn-primary">
             <i class="fas fa-plus me-1"></i> Catat Peminjaman
         </a>
     </div>
 
+    {{-- Tabel --}}
     <div class="table-responsive">
-
-        <table class="table table-hover">
-            <thead>
+        <table class="table table-hover table-bordered align-middle">
+            <thead class="table-light">
                 <tr>
                     <th>#</th>
                     <th>Santri</th>
                     <th>Buku</th>
                     <th>Tanggal Pinjam</th>
+                    <th>Tanggal Batas</th>
                     <th>Tanggal Kembali</th>
+                    <th>Status Telat</th>
                     <th>Status</th>
                     <th>Aksi</th>
                 </tr>
@@ -50,17 +50,30 @@
                         <td>{{ $i + 1 }}</td>
                         <td>{{ $loan->user->nama }}</td>
                         <td>{{ $loan->book->judul }}</td>
-                        <td>{{ $loan->tanggal_pinjam }}</td>
-                        <td>{{ $loan->tanggal_kembali ?? '-' }}</td>
-                        <td>
-                            <button
-                                class="btn btn-sm toggle-status 
-        {{ $loan->status == 'dikembalikan' ? 'btn-success' : 'btn-warning' }}"
-                                data-id="{{ $loan->id }}">
-                                {{ ucfirst($loan->status) }}
-                            </button>
-                        </td>
+                        <td>{{ \Carbon\Carbon::parse($loan->tanggal_pinjam)->translatedFormat('d M Y') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($loan->tanggal_tenggat)->translatedFormat('d M Y') }}</td>
 
+                        <td>
+                            @if ($loan->tanggal_kembali)
+                                {{ \Carbon\Carbon::parse($loan->tanggal_kembali)->translatedFormat('d M Y') }}
+                            @else
+                                <span class="text-muted">-</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if ($loan->tanggal_kembali && $loan->tanggal_kembali > $loan->tanggal_tenggat)
+                                <span class="badge bg-danger">Terlambat</span>
+                            @elseif ($loan->status == 'dipinjam' && now()->gt($loan->tanggal_tenggat))
+                                <span class="badge bg-danger">Terlambat</span>
+                            @else
+                                <span class="badge bg-success">Tepat Waktu</span>
+                            @endif
+                        </td>
+                        <td>
+                            <span class="badge bg-{{ $loan->status == 'dikembalikan' ? 'success' : 'warning' }}">
+                                {{ ucfirst($loan->status) }}
+                            </span>
+                        </td>
                         <td>
                             <a href="{{ route('peminjaman.edit', $loan->id) }}" class="btn btn-sm btn-warning">
                                 <i class="fas fa-edit"></i>
@@ -75,42 +88,17 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="text-center text-muted py-5">
+                        <td colspan="10" class="text-center text-muted py-5">
                             <i class="fas fa-book-reader fa-2x mb-2"></i>
-                            <div>Tidak ada data peminjaman.</div>
+                            <div>Belum ada data peminjaman.</div>
                         </td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
+
     </div>
 @endsection
-@push('scripts')
-    <script>
-        document.querySelectorAll('.toggle-status').forEach(button => {
-            button.addEventListener('click', function() {
-                const loanId = this.getAttribute('data-id');
 
-                fetch(`/peminjaman/${loanId}/toggle-status`, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                            this.textContent = data.status.charAt(0).toUpperCase() + data.status.slice(
-                                1);
-                            this.classList.toggle('btn-success');
-                            this.classList.toggle('btn-warning');
-                        } else {
-                            alert('Gagal mengubah status.');
-                        }
-                    })
-                    .catch(() => alert('Terjadi kesalahan server.'));
-            });
-        });
-    </script>
+@push('scripts')
 @endpush

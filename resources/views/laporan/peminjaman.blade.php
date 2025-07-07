@@ -14,6 +14,10 @@
                 <i class="fas fa-file-pdf me-1"></i> Export PDF
             </a>
 
+            <a href="{{ route('laporan.peminjaman.excel') }}" class="btn btn-success mb-3">
+                <i class="fas fa-file-excel me-1"></i> Export Excel
+            </a>
+
             <table class="table table-hover table-bordered">
                 <thead>
                     <tr>

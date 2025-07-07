@@ -26,8 +26,6 @@
     </a>
 
     <!-- Laporan dengan submenu -->
-
-
     <div class="collapse {{ request()->routeIs('laporan.*') ? 'show' : '' }}" id="submenuLaporan">
         <nav class="nav flex-column ms-4">
             <a class="nav-link {{ request()->routeIs('laporan.peminjaman') ? 'active' : '' }}"

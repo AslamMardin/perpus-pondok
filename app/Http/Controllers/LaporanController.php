@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Loan;
 use Carbon\Carbon;
+use App\Models\Loan;
+use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class LaporanController extends Controller
 {
@@ -40,6 +41,14 @@ public function peminjaman()
 {
     $loans = Loan::with(['user', 'book'])->latest()->get();
     return view('laporan.peminjaman', compact('loans'));
+}
+
+public function exportPeminjamanPdf()
+{
+    $loans = Loan::with(['user', 'book'])->get();
+
+    $pdf = Pdf::loadView('laporan.pdf.peminjaman', compact('loans'));
+    return $pdf->download('laporan_peminjaman.pdf');
 }
 
 }

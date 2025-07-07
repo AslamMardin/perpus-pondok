@@ -43,16 +43,21 @@ Route::resource('/pengembalian', BookController::class)->parameters([
     'pengembalian' => 'pengembalian' // agar route binding cocok dengan variabel $buku
 ]);
 
+// Halaman utama laporan dan filter
 Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
 Route::post('/laporan/filter', [LaporanController::class, 'filter'])->name('laporan.filter');
+
+// Grup dengan prefix 'laporan.' dan url 'laporan/...'
 Route::prefix('laporan')->name('laporan.')->group(function () {
-    Route::get('/peminjaman', [LaporanController::class, 'peminjaman'])->name('peminjaman');
-    Route::get('/pengembalian', [LaporanController::class, 'pengembalian'])->name('pengembalian');
-    Route::get('/terlambat', [LaporanController::class, 'terlambat'])->name('terlambat');
-    Route::get('/tanggal', [LaporanController::class, 'tanggal'])->name('tanggal');
-    Route::get('/santri', [LaporanController::class, 'santri'])->name('santri');
+    Route::get('peminjaman', [LaporanController::class, 'peminjaman'])->name('peminjaman');
+    Route::get('peminjaman/pdf', [LaporanController::class, 'exportPeminjamanPdf'])->name('peminjaman.pdf');
+
+    Route::get('pengembalian', [LaporanController::class, 'pengembalian'])->name('pengembalian');
+    Route::get('terlambat', [LaporanController::class, 'terlambat'])->name('terlambat');
+    Route::get('tanggal', [LaporanController::class, 'tanggal'])->name('tanggal');
+    Route::get('santri', [LaporanController::class, 'santri'])->name('santri');
 });
-    
+
  Route::get('/pengaturan', [AdminController::class, 'pengaturan'])->name('pengaturan');
   Route::post('/pengaturan', [AdminController::class, 'updatePengaturan'])->name('pengaturan.update');
 });

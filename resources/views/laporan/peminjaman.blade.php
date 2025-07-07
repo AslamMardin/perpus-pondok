@@ -10,6 +10,10 @@
 
     <div class="card">
         <div class="card-body table-responsive">
+            <a href="{{ route('laporan.peminjaman.pdf') }}" class="btn btn-danger mb-3">
+                <i class="fas fa-file-pdf me-1"></i> Export PDF
+            </a>
+
             <table class="table table-hover table-bordered">
                 <thead>
                     <tr>

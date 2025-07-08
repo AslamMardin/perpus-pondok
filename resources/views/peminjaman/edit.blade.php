@@ -37,6 +37,12 @@
         </div>
 
         <div class="mb-3">
+            <label>Jumlah Buku</label>
+            <input type="number" name="jumlah_buku" class="form-control" min="1"
+                value="{{ old('jumlah_buku', $peminjaman->jumlah_buku ?? 1) }}" required>
+        </div>
+
+        <div class="mb-3">
             <label>Tanggal Pinjam</label>
             <input type="date" name="tanggal_pinjam" class="form-control"
                 value="{{ old('tanggal_pinjam', $peminjaman->tanggal_pinjam ?? '') }}" required>

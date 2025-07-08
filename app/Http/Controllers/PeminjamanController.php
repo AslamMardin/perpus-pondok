@@ -10,10 +10,11 @@ use Illuminate\Http\Request;
 
 class PeminjamanController extends Controller
 {
-   public function index(Request $request)
+  public function index(Request $request)
 {
     $query = Loan::with(['user', 'book']);
 
+    // Filter status
     if ($request->filter == 'terlambat') {
         $query->where('status', 'dipinjam')
               ->whereDate('tanggal_tenggat', '<', now());
@@ -25,10 +26,24 @@ class PeminjamanController extends Controller
         $query->whereDate('tanggal_pinjam', today());
     }
 
-    $loans = $query->latest()->paginate(10); // Sudah benar: pagination 10 per halaman
+    // Pencarian: nama santri atau judul buku
+    if ($request->filled('search')) {
+        $search = $request->search;
+
+        $query->where(function ($q) use ($search) {
+            $q->whereHas('user', function ($qUser) use ($search) {
+                $qUser->where('nama', 'like', '%' . $search . '%');
+            })->orWhereHas('book', function ($qBook) use ($search) {
+                $qBook->where('judul', 'like', '%' . $search . '%');
+            });
+        });
+    }
+
+    $loans = $query->latest()->paginate(10)->withQueryString(); // withQueryString agar filter & search tetap terjaga saat pagination
 
     return view('peminjaman.index', compact('loans'));
 }
+
 
 
  public function create()
@@ -52,18 +67,23 @@ class PeminjamanController extends Controller
     $request->validate([
         'user_id' => 'required|exists:users,id',
         'book_id' => 'required|exists:books,id',
+        'jumlah_buku' => 'required|integer|min:1',
         'tanggal_pinjam' => 'required|date',
         'tanggal_kembali' => 'nullable|date',
         'status' => 'required|in:dipinjam,dikembalikan',
     ]);
 
+   
+
     $tanggalPinjam = \Carbon\Carbon::parse($request->tanggal_pinjam);
     $tanggalTenggat = \Carbon\Carbon::parse($request->tanggal_pinjam); // tenggat = 7 hari
 
-    Loan::create([
-        'user_id' => $request->user_id,
-        'book_id' => $request->book_id,
-        'tanggal_pinjam' => $tanggalPinjam,
+
+Loan::create([
+    'user_id' => $request->user_id,
+    'book_id' => $request->book_id,
+    'tanggal_pinjam' => $tanggalPinjam,
+    'jumlah_buku' => $request->jumlah_buku,
         'tanggal_tenggat' => $tanggalTenggat,
         'tanggal_kembali' => null,
         'status' => $request->status,
@@ -83,17 +103,24 @@ class PeminjamanController extends Controller
 
    public function update(Request $request, Loan $peminjaman)
 {
-    $request->validate([
-        'user_id' => 'required|exists:users,id',
-        'book_id' => 'required|exists:books,id',
+
+
+
+$request->validate([
+    'user_id' => 'required|exists:users,id',
+    'book_id' => 'required|exists:books,id',
+    'jumlah_buku' => 'required|integer|min:1',
         'tanggal_pinjam' => 'required|date',
         'tanggal_tenggat' => 'required|date|after_or_equal:tanggal_pinjam',
         'tanggal_kembali' => 'nullable|date',
         'status' => 'required|in:dipinjam,dikembalikan',
     ]);
 
+    
+
     $peminjaman->user_id = $request->user_id;
     $peminjaman->book_id = $request->book_id;
+    $peminjaman->jumlah_buku = $request->jumlah_buku;
     $peminjaman->tanggal_pinjam = $request->tanggal_pinjam;
     $peminjaman->tanggal_tenggat = $request->tanggal_tenggat;
     $peminjaman->status = $request->status;

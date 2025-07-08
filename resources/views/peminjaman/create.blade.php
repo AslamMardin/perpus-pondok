@@ -46,6 +46,11 @@
 
         {{-- Row Tanggal & Status --}}
         <div class="row">
+            <div class="col-md-2 mb-3">
+                <label>Jumlah Buku</label>
+                <input type="number" name="jumlah_buku" class="form-control" min="1"
+                    value="{{ old('jumlah_buku', 1) }}" required>
+            </div>
             <div class="col-md-4 mb-3">
                 <label>Tanggal Pinjam</label>
                 <input type="text" id="tanggal_pinjam" name="tanggal_pinjam" class="form-control" required>
@@ -60,9 +65,9 @@
             </div>
 
 
-            <div class="col-md-4 mb-3">
+            <div class="col-md-2 mb-3">
                 <label>Status</label>
-                <select name="status" class="form-select border-0 bg-light text-dark fw-semibold shadow-sm rounded">
+                <select name="status" class="form-select border-0 bg-warning text-dark fw-semibold shadow-sm rounded">
                     <option value="dipinjam" {{ old('status') == 'dipinjam' ? 'selected' : '' }}>📚 Dipinjam</option>
                     <option value="dikembalikan" {{ old('status') == 'dikembalikan' ? 'selected' : '' }}>✅ Dikembalikan
                     </option>
@@ -167,12 +172,15 @@
             document.getElementById('tanggal_kembali').value = today;
         }
 
-        // Shortcut Ctrl atau Ctrl+B untuk fokus ke input ID Buku
+        // Shortcut Ctrl atau Ctrl+B untuk fokus ke input ID Buku dan kosongkan nilainya
         document.addEventListener('keydown', function(e) {
-            if ((e.ctrlKey && !e.shiftKey && !e.altKey && e.code === 'ControlLeft') ||
-                (e.ctrlKey && e.key.toLowerCase() === 'b')) {
+            const bookInput = document.getElementById('book_id');
+
+            // Tekan Ctrl (sendiri) ATAU Ctrl+B
+            if ((e.ctrlKey && e.code === 'ControlLeft') || (e.ctrlKey && e.key.toLowerCase() === 'b')) {
                 e.preventDefault();
-                document.getElementById('book_id').focus();
+                bookInput.focus();
+                bookInput.value = ''; // Kosongkan isinya
             }
         });
 

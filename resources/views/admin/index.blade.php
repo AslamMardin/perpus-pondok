@@ -68,6 +68,7 @@
 
             <!-- Recent Activity -->
             <div class="row">
+
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header bg-white border-0 py-3">
@@ -83,14 +84,16 @@
 
                             @if ($recentLoans->count() > 0)
                                 <div class="table-responsive">
+
                                     <table class="table table-hover">
                                         <thead class="table-light">
                                             <tr>
                                                 <th>Santri</th>
                                                 <th>Buku</th>
+                                                <th>Jumlah Buku</th>
                                                 <th>Tanggal Pinjam</th>
-                                                <th>Tanggal Kembali</th>
-                                                <th>Status</th>
+                                                <th>Aksi</th>
+
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -124,6 +127,8 @@
                                                         <h6 class="mb-0">{{ $loan->book->judul }}</h6>
                                                         <small class="text-muted">{{ $loan->book->kategori ?? '-' }}</small>
                                                     </td>
+                                                    <td>{{ $loan->jumlah_buku }}
+                                                    </td>
                                                     <td>
                                                         @php
                                                             $tanggalPinjam = \Carbon\Carbon::parse(
@@ -138,51 +143,45 @@
                                                         </div>
                                                     </td>
 
-                                                    <td>
-                                                        @php
-                                                            $tanggalKembali = $loan->tanggal_kembali
-                                                                ? \Carbon\Carbon::parse($loan->tanggal_kembali)
-                                                                : null;
-                                                        @endphp
-                                                        <div>
-                                                            @if ($tanggalKembali)
-                                                                {{ $tanggalKembali->translatedFormat('d F Y') }}
-                                                                @if ($tanggalKembali->isToday())
-                                                                    <span class="badge bg-info text-dark ms-1">Hari
-                                                                        Ini</span>
-                                                                @endif
-                                                            @else
-                                                                <span class="text-muted">-</span>
-                                                            @endif
-                                                        </div>
-                                                    </td>
+
 
                                                     @php
-                                                        // Ambil status asli dari database
-                                                        $status = $loan->status;
+                                                        $isTerlambat = false;
 
-                                                        // Kalau masih dipinjam tapi sudah lewat tenggat, tandai sebagai terlambat
-                                                        if (
-                                                            $status === 'dipinjam' &&
-                                                            $loan->tanggal_tenggat &&
-                                                            \Carbon\Carbon::parse($loan->tanggal_tenggat)->isPast()
+                                                        $tenggat = \Carbon\Carbon::parse(
+                                                            $loan->tanggal_tenggat,
+                                                        )->toDateString();
+                                                        $tanggalKembali = $loan->tanggal_kembali
+                                                            ? \Carbon\Carbon::parse(
+                                                                $loan->tanggal_kembali,
+                                                            )->toDateString()
+                                                            : null;
+                                                        $hariIni = now()->toDateString();
+
+                                                        if ($loan->status === 'dipinjam' && $hariIni > $tenggat) {
+                                                            $isTerlambat = true;
+                                                        } elseif (
+                                                            $loan->status === 'dikembalikan' &&
+                                                            $tanggalKembali > $tenggat
                                                         ) {
-                                                            $status = 'terlambat';
+                                                            $isTerlambat = true;
                                                         }
                                                     @endphp
 
                                                     <td>
-                                                        <span class="status-badge status-{{ $status }}">
-                                                            @if ($status == 'dipinjam')
-                                                                <i class="fas fa-clock me-1"></i> Dipinjam
-                                                            @elseif ($status == 'dikembalikan')
-                                                                <i class="fas fa-check-circle me-1"></i> Dikembalikan
-                                                            @else
-                                                                <i class="fas fa-exclamation-triangle me-1"></i>
-                                                                Terlambat
-                                                            @endif
-                                                        </span>
+                                                        @if ($isTerlambat)
+                                                            <span class="badge bg-danger"><i
+                                                                    class="fas fa-exclamation-triangle me-1"></i>
+                                                                Terlambat</span>
+                                                        @elseif ($loan->status === 'dipinjam')
+                                                            <span class="badge bg-warning text-dark"><i
+                                                                    class="fas fa-clock me-1"></i> Belum Kembali</span>
+                                                        @else
+                                                            <span class="badge bg-success"><i
+                                                                    class="fas fa-check-circle me-1"></i> Tepat Waktu</span>
+                                                        @endif
                                                     </td>
+
 
                                                 </tr>
                                             @endforeach

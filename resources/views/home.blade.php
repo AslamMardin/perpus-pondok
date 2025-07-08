@@ -78,14 +78,7 @@
                                         placeholder="Cari nama santri atau judul buku...">
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <select class="form-select bg-light border-0" id="statusFilter">
-                                    <option value="">Semua Status</option>
-                                    <option value="dipinjam">Dipinjam</option>
-                                    <option value="dikembalikan">Dikembalikan</option>
-                                    <option value="terlambat">Terlambat</option>
-                                </select>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -116,11 +109,12 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center" style="width: 5%">#</th>
-                                        <th>Nama Santri</th>
-                                        <th class="text-center">Kelas</th>
+
                                         <th>Judul Buku</th>
-                                        <th class="text-center">Tanggal Pinjam</th>
-                                        <th class="text-center">Status</th>
+                                        <th>Jumlah Buku</th>
+                                        <th class="text-center">Kelas</th>
+                                        <th>Nama Santri</th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -139,6 +133,20 @@
 
                                         <tr>
                                             <td class="text-center">{{ $i + 1 }}</td>
+
+                                            <td>
+                                                <div>
+                                                    <h6 class="mb-1">{{ $loan->book->judul }}</h6>
+                                                    <small class="text-muted">{{ $loan->book->kategori ?? '-' }}</small>
+                                                </div>
+                                            </td>
+                                            <td>{{ $loan->jumlah_buku }}
+                                            </td>
+
+                                            <td class="text-center">
+                                                <span
+                                                    class="badge bg-light text-dark">{{ $loan->user->kelas ?? '-' }}</span>
+                                            </td>
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <div
@@ -152,31 +160,7 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="text-center">
-                                                <span
-                                                    class="badge bg-light text-dark">{{ $loan->user->kelas ?? '-' }}</span>
-                                            </td>
-                                            <td>
-                                                <div>
-                                                    <h6 class="mb-1">{{ $loan->book->judul }}</h6>
-                                                    <small class="text-muted">{{ $loan->book->kategori ?? '-' }}</small>
-                                                </div>
-                                            </td>
-                                            <td class="text-center">
-                                                {{ \Carbon\Carbon::parse($loan->tanggal_pinjam)->translatedFormat('d F Y') }}
-                                            </td>
 
-                                            <td class="text-center">
-                                                <span class="status-badge status-{{ $status }}">
-                                                    @if ($status === 'dipinjam')
-                                                        <i class="fas fa-clock me-1"></i> Dipinjam
-                                                    @elseif ($status === 'dikembalikan')
-                                                        <i class="fas fa-check-circle me-1"></i> Dikembalikan
-                                                    @elseif ($status === 'terlambat')
-                                                        <i class="fas fa-exclamation-triangle me-1"></i> Terlambat
-                                                    @endif
-                                                </span>
-                                            </td>
                                         </tr>
                                     @empty
                                         <tr>
@@ -250,27 +234,7 @@
                 filterTable();
             });
 
-            function filterTable() {
-                const searchTerm = searchInput.value.toLowerCase();
-                const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
 
-                rows.forEach(row => {
-                    if (row.cells.length === 1) return; // Skip empty state row
-
-                    const santriName = row.cells[1].textContent.toLowerCase();
-                    const bookTitle = row.cells[3].textContent.toLowerCase();
-                    const status = row.querySelector('.status-badge').textContent.toLowerCase();
-
-                    const matchesSearch = santriName.includes(searchTerm) || bookTitle.includes(searchTerm);
-                    const matchesStatus = !statusFilter || status.includes(statusFilter);
-
-                    if (matchesSearch && matchesStatus) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-            }
 
             // Add smooth hover effects
             rows.forEach(row => {

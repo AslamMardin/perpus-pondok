@@ -15,6 +15,7 @@ return new class extends Migration
     $table->id();
     $table->foreignId('user_id')->constrained('users')->onDelete('restrict');
     $table->foreignId('book_id')->constrained('books')->onDelete('restrict');
+    $table->integer('jumlah_buku')->default(1);
     $table->date('tanggal_pinjam');
     $table->date('tanggal_tenggat')->nullable();
     $table->date('tanggal_kembali')->nullable();

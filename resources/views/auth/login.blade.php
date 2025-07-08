@@ -192,7 +192,7 @@
             </form>
 
             <div class="footer-text">
-                PPM Al-Ikhlash Lampoko | 2025
+                Produk Aslam Mardin,S.Kom., M.Kom
             </div>
         </div>
     </div>

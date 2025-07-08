@@ -205,7 +205,7 @@
                 <div class="text-center py-4 border-top">
                     <p class="text-muted mb-0">
                         <i class="fas fa-mosque me-2"></i>
-                        PPM Al-Ikhlash Lampoko | 2025
+                        PPM Al-Ikhlash Lampoko | 2025 | Produk Aslam Mardin,S.Kom., M.Kom
                     </p>
                 </div>
             </div>

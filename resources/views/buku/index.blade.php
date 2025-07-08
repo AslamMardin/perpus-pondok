@@ -12,6 +12,11 @@
     <a class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalTambahBuku">
         <i class="fas fa-plus me-1"></i> Tambah Buku
     </a>
+    <a href="{{ route('buku.barcode-semua') }}" class="btn btn-info mb-3 ms-2">
+        <i class="fas fa-qrcode me-1"></i> Barcode Semua Buku
+    </a>
+
+
     @if (request('search'))
         <div class="mb-2">
             <span class="text-muted">Hasil pencarian untuk: <strong>{{ request('search') }}</strong></span>
@@ -25,6 +30,8 @@
         </button>
     </form>
     <div class="table-responsive">
+        <!-- Tombol Generate Semua Barcode -->
+
 
         <table class="table table-hover">
             <thead>
@@ -46,6 +53,11 @@
                         <td>
                             <a href="{{ route('buku.edit', $book->id) }}" class="btn btn-sm btn-warning">
                                 <i class="fas fa-edit"></i>
+                            </a>
+
+                            <a href="{{ route('buku.barcode', $book->id) }}" class="btn btn-sm btn-info"
+                                title="Lihat Barcode">
+                                <i class="fas fa-qrcode"></i> Barcode
                             </a>
                             <form action="{{ route('buku.destroy', $book->id) }}" method="POST" style="display:inline">
                                 @csrf @method('DELETE')

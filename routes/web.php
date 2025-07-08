@@ -5,13 +5,15 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\PeminjamanExport;
 use App\Exports\PengembalianExport;
 use App\Exports\TerlambatExport;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\BookController;
-use App\Http\Controllers\PenggunaController;
-use App\Http\Controllers\PeminjamanController;
-use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\{
+    HomeController,
+    LoginController,
+    AdminController,
+    BookController,
+    PenggunaController,
+    PeminjamanController,
+    LaporanController
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -45,18 +47,22 @@ Route::middleware('auth')->group(function () {
     | Manajemen Buku, Pengguna, dan Peminjaman
     |--------------------------------------------------------------------------
     */
-    Route::resource('/buku', BookController::class)->parameters(['buku' => 'buku']);
-    Route::resource('/pengguna', PenggunaController::class)->parameters(['pengguna' => 'pengguna']);
-    Route::resource('/peminjaman', PeminjamanController::class)->parameters(['peminjaman' => 'peminjaman']);
+    Route::resource('buku', BookController::class)->parameters(['buku' => 'buku'])->except(['show']);
+    Route::get('buku/{buku}/barcode', [BookController::class, 'showBarcode'])->name('buku.barcode');
+    Route::get('buku/barcode-semua', [BookController::class, 'barcodeSemua'])->name('buku.barcode-semua');
+    
+
+    Route::resource('pengguna', PenggunaController::class)->parameters(['pengguna' => 'pengguna']);
+    Route::resource('peminjaman', PeminjamanController::class)->parameters(['peminjaman' => 'peminjaman']);
 
     // API data buku (misalnya untuk autocomplete form)
-    Route::get('/api/buku/{id}', fn($id) => \App\Models\Book::find($id));
+    Route::get('api/buku/{id}', fn($id) => \App\Models\Book::find($id));
 
     // Ubah status peminjaman (dipinjam <-> dikembalikan)
-    Route::post('/peminjaman/{loan}/toggle-status', [PeminjamanController::class, 'toggleStatus'])->name('peminjaman.toggleStatus');
+    Route::post('peminjaman/{loan}/toggle-status', [PeminjamanController::class, 'toggleStatus'])->name('peminjaman.toggleStatus');
 
     // Riwayat pengembalian
-    Route::get('/riwayat-pengembalian', [PeminjamanController::class, 'riwayat'])->name('riwayat.pengembalian');
+    Route::get('riwayat-pengembalian', [PeminjamanController::class, 'riwayat'])->name('riwayat.pengembalian');
 
     /*
     |--------------------------------------------------------------------------
@@ -89,5 +95,4 @@ Route::middleware('auth')->group(function () {
         Route::get('santri', [LaporanController::class, 'santri'])->name('santri');
         Route::post('santri', [LaporanController::class, 'filterSantri'])->name('santri.filter');
     });
-
 });

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class BookController extends Controller
 {
@@ -68,4 +71,23 @@ class BookController extends Controller
         $buku->delete();
         return redirect()->route('buku.index')->with('success', 'Buku berhasil dihapus.');
     }
+
+
+public function showBarcode(Book $buku)
+{
+    $qrContent = $buku->id; // atau isi bebas
+
+    $barcodeSvg = QrCode::size(300)->generate($qrContent);
+
+    return view('buku.barcode-view', compact('buku', 'barcodeSvg'));
+}
+public function barcodeSemua()
+{
+    $books = \App\Models\Book::orderBy('judul')->get();
+    return view('buku.barcode-semua', compact('books'));
+}
+
+
+
+
 }

@@ -66,12 +66,8 @@
 
 
             <div class="col-md-2 mb-3">
-                <label>Status</label>
-                <select name="status" class="form-select border-0 bg-warning text-dark fw-semibold shadow-sm rounded">
-                    <option value="dipinjam" {{ old('status') == 'dipinjam' ? 'selected' : '' }}>📚 Dipinjam</option>
-                    <option value="dikembalikan" {{ old('status') == 'dikembalikan' ? 'selected' : '' }}>✅ Dikembalikan
-                    </option>
-                </select>
+                <input type="hidden" name="status" value="dipinjam">
+
             </div>
         </div>
 

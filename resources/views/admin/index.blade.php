@@ -91,7 +91,6 @@
                                                 <th>Santri</th>
                                                 <th>Buku</th>
                                                 <th>Jumlah Buku</th>
-                                                <th>Tanggal Pinjam</th>
                                                 <th>Aksi</th>
 
                                             </tr>
@@ -129,19 +128,7 @@
                                                     </td>
                                                     <td>{{ $loan->jumlah_buku }}
                                                     </td>
-                                                    <td>
-                                                        @php
-                                                            $tanggalPinjam = \Carbon\Carbon::parse(
-                                                                $loan->tanggal_pinjam,
-                                                            );
-                                                        @endphp
-                                                        <div>
-                                                            {{ $tanggalPinjam->translatedFormat('d F Y') }}
-                                                            @if ($tanggalPinjam->isToday())
-                                                                <span class="badge bg-success ms-1">Hari Ini</span>
-                                                            @endif
-                                                        </div>
-                                                    </td>
+
 
 
 

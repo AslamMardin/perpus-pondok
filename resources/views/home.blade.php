@@ -100,7 +100,7 @@
                     <div class="card-header bg-white border-0 py-3">
                         <h5 class="mb-0">
                             <i class="fas fa-list me-2 text-primary"></i>
-                            Data Peminjaman
+                            Data Peminjaman Hari Ini
                         </h5>
                     </div>
                     <div class="card-body p-0">

@@ -148,17 +148,8 @@
                                                     class="badge bg-light text-dark">{{ $loan->user->kelas ?? '-' }}</span>
                                             </td>
                                             <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div
-                                                        class="avatar-sm bg-primary rounded-circle d-flex align-items-center justify-content-center me-3">
-                                                        <i class="fas fa-user text-white"></i>
-                                                    </div>
-                                                    <div>
-                                                        <h6 class="mb-0">{{ $loan->user->nama }}</h6>
-                                                        <small
-                                                            class="text-muted">{{ $loan->user->username ?? '-' }}</small>
-                                                    </div>
-                                                </div>
+                                                <h6 class="mb-0">{{ $loan->user->nama }}</h6>
+
                                             </td>
 
                                         </tr>

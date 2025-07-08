@@ -58,14 +58,14 @@ class PeminjamanController extends Controller
     ]);
 
     $tanggalPinjam = \Carbon\Carbon::parse($request->tanggal_pinjam);
-    $tanggalTenggat = $tanggalPinjam->copy()->addDays(7); // tenggat = 7 hari
+    $tanggalTenggat = \Carbon\Carbon::parse($request->tanggal_pinjam); // tenggat = 7 hari
 
     Loan::create([
         'user_id' => $request->user_id,
         'book_id' => $request->book_id,
         'tanggal_pinjam' => $tanggalPinjam,
         'tanggal_tenggat' => $tanggalTenggat,
-        'tanggal_kembali' => $request->tanggal_kembali,
+        'tanggal_kembali' => null,
         'status' => $request->status,
     ]);
 
@@ -81,19 +81,38 @@ class PeminjamanController extends Controller
         return view('peminjaman.edit', compact('peminjaman', 'users', 'books'));
     }
 
-    public function update(Request $request, Loan $peminjaman)
-    {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'book_id' => 'required|exists:books,id',
-            'tanggal_pinjam' => 'required|date',
-            'tanggal_kembali' => 'nullable|date',
-            'status' => 'required|in:dipinjam,dikembalikan',
-        ]);
+   public function update(Request $request, Loan $peminjaman)
+{
+    $request->validate([
+        'user_id' => 'required|exists:users,id',
+        'book_id' => 'required|exists:books,id',
+        'tanggal_pinjam' => 'required|date',
+        'tanggal_tenggat' => 'required|date|after_or_equal:tanggal_pinjam',
+        'tanggal_kembali' => 'nullable|date',
+        'status' => 'required|in:dipinjam,dikembalikan',
+    ]);
 
-        $peminjaman->update($request->all());
-        return redirect()->route('peminjaman.index')->with('success', 'Data peminjaman diperbarui.');
+    $peminjaman->user_id = $request->user_id;
+    $peminjaman->book_id = $request->book_id;
+    $peminjaman->tanggal_pinjam = $request->tanggal_pinjam;
+    $peminjaman->tanggal_tenggat = $request->tanggal_tenggat;
+    $peminjaman->status = $request->status;
+
+    // Tangani tanggal_kembali
+    if ($request->status === 'dikembalikan' && is_null($peminjaman->tanggal_kembali)) {
+        $peminjaman->tanggal_kembali = now();
     }
+
+    // Jika status kembali ke 'dipinjam', kosongkan tanggal_kembali
+    if ($request->status === 'dipinjam') {
+        $peminjaman->tanggal_kembali = null;
+    }
+
+    $peminjaman->save();
+
+    return redirect()->route('peminjaman.index')->with('success', 'Data peminjaman diperbarui.');
+}
+
 
     public function destroy(Loan $peminjaman)
     {
@@ -142,6 +161,9 @@ public function riwayat(Request $request)
 
     return view('peminjaman.riwayat', compact('loans', 'daftarKelas'));
 }
+
+
+
 
 
 

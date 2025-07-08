@@ -60,6 +60,7 @@ Route::middleware('auth')->group(function () {
 
     // Ubah status peminjaman (dipinjam <-> dikembalikan)
     Route::post('peminjaman/{loan}/toggle-status', [PeminjamanController::class, 'toggleStatus'])->name('peminjaman.toggleStatus');
+    Route::post('/peminjaman/{loan}/kembalikan', [PeminjamanController::class, 'toggleStatus'])->name('peminjaman.kembalikan');
 
     // Riwayat pengembalian
     Route::get('riwayat-pengembalian', [PeminjamanController::class, 'riwayat'])->name('riwayat.pengembalian');
@@ -74,7 +75,7 @@ Route::middleware('auth')->group(function () {
         Route::get('peminjaman', [LaporanController::class, 'peminjaman'])->name('peminjaman');
         Route::get('peminjaman/pdf', [LaporanController::class, 'exportPeminjamanPdf'])->name('peminjaman.pdf');
         Route::get('peminjaman/excel', fn() => Excel::download(new PeminjamanExport, 'laporan_peminjaman.xlsx'))->name('peminjaman.excel');
-
+        
         // Pengembalian
         Route::get('pengembalian', [LaporanController::class, 'pengembalian'])->name('pengembalian');
         Route::get('pengembalian/pdf', [LaporanController::class, 'exportPengembalianPdf'])->name('pengembalian.pdf');

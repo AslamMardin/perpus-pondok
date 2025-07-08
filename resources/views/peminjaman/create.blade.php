@@ -36,19 +36,7 @@
                     </button>
                 </div>
 
-                {{-- TOMBOL SANTRI --}}
-                <div class="mt-4">
-                    <label class="form-label fw-semibold">Atau pilih langsung dari daftar santri berikut:</label>
 
-                    <div class="d-flex flex-wrap gap-2 mt-2">
-                        @foreach ($users->where('peran', 'santri')->sortBy('nama') as $user)
-                            <button type="button" class="btn btn-outline-success btn-sm"
-                                onclick="pilihSantri('{{ $user->id }}', '{{ $user->nama }}')">
-                                {{ $user->nama }}
-                            </button>
-                        @endforeach
-                    </div>
-                </div>
 
 
 
@@ -63,9 +51,12 @@
                 <input type="text" id="tanggal_pinjam" name="tanggal_pinjam" class="form-control" required>
             </div>
 
-            <div class="input-group">
-                <input type="text" id="tanggal_kembali" name="tanggal_kembali" class="form-control">
-                <button type="button" class="btn btn-outline-secondary" onclick="setKembaliHariIni()">Hari Ini</button>
+            <div class="col-md-4 mb-3">
+                <label>Batas Pinjaman</label>
+                <div class="input-group">
+                    <input type="text" id="tanggal_kembali" name="tanggal_kembali" class="form-control">
+                    <button type="button" class="btn btn-outline-secondary" onclick="setKembaliHariIni()">Hari Ini</button>
+                </div>
             </div>
 
 

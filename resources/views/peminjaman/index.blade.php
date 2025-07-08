@@ -38,7 +38,7 @@
                     <th>Santri</th>
                     <th>Buku</th>
                     <th>Tanggal Pinjam</th>
-                    <th>Tanggal Batas</th>
+                    <th>Batas Watu</th>
                     <th>Tanggal Kembali</th>
                     <th>Status Telat</th>
                     <th>Status</th>
@@ -68,30 +68,58 @@
                             @endif
                         </td>
                         <td>
-                            @if ($loan->tanggal_kembali && $loan->tanggal_kembali > $loan->tanggal_tenggat)
+                            @php
+                                $isTerlambat = false;
+
+                                $tenggat = \Carbon\Carbon::parse($loan->tanggal_tenggat)->toDateString(); // hanya tanggal
+                                $tanggalKembali = $loan->tanggal_kembali
+                                    ? \Carbon\Carbon::parse($loan->tanggal_kembali)->toDateString()
+                                    : null;
+                                $hariIni = now()->toDateString();
+
+                                if ($loan->status === 'dipinjam' && $hariIni > $tenggat) {
+                                    $isTerlambat = true;
+                                } elseif ($loan->status === 'dikembalikan' && $tanggalKembali > $tenggat) {
+                                    $isTerlambat = true;
+                                }
+                            @endphp
+
+                            @if ($isTerlambat)
                                 <span class="badge bg-danger">Terlambat</span>
-                            @elseif ($loan->status == 'dipinjam' && $loan->tanggal_tenggat && now()->gt($loan->tanggal_tenggat))
-                                <span class="badge bg-danger">Terlambat</span>
+                            @elseif ($loan->status === 'dipinjam')
+                                <span class="badge bg-warning text-dark">Belum Kembali</span>
                             @else
                                 <span class="badge bg-success">Tepat Waktu</span>
                             @endif
+
                         </td>
+
+
+
                         <td>
                             <span class="badge bg-{{ $loan->status == 'dikembalikan' ? 'success' : 'warning' }}">
                                 {{ ucfirst($loan->status) }}
                             </span>
                         </td>
                         <td>
-                            <a href="{{ route('peminjaman.edit', $loan->id) }}" class="btn btn-sm btn-warning">
+                            {{-- Tombol Edit --}}
+                            <a href="{{ route('peminjaman.edit', $loan->id) }}" class="btn btn-sm btn-warning"
+                                title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
+
+
+                            {{-- Tombol Hapus --}}
                             <form action="{{ route('peminjaman.destroy', $loan->id) }}" method="POST" class="d-inline">
-                                @csrf @method('DELETE')
-                                <button class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus?')">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus?')"
+                                    title="Hapus">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </form>
                         </td>
+
                     </tr>
                 @empty
                     <tr>
@@ -112,4 +140,5 @@
 @endsection
 
 @push('scripts')
+    <script></script>
 @endpush

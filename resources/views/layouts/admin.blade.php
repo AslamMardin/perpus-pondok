@@ -207,6 +207,7 @@
     </style>
 
     @yield('styles')
+    @stack('styles')
 </head>
 
 <body>
@@ -222,7 +223,8 @@
                             <img src="{{ asset('img/logo.png') }}" alt="Logo PPM" class="img-fluid rounded-circle"
                                 style="width: 60px; height: 60px; object-fit: cover;">
                         </div>
-                        <h6 class="text-white mb-0">PPM Al-Ikhlash</h6>
+                        <h6 class="text-white mb-0"><a href="/" style="color: white; text-decoration: none">PPM
+                                Al-Ikhlash</a></h6>
                         <small class="text-white-50">Perpustakaan</small>
                     </div>
 
@@ -302,16 +304,6 @@
         }
     </script>
 
-    <script>
-        flatpickr("#tanggal_pinjam", {
-            dateFormat: "Y-m-d",
-            defaultDate: "today"
-        });
-        flatpickr("#tanggal_kembali", {
-            dateFormat: "Y-m-d",
-            defaultDate: "today"
-        });
-    </script>
 
     {{-- @yield('scripts') --}}
     @stack('scripts')

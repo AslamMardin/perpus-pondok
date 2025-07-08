@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Loan;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
@@ -27,9 +28,11 @@ class LaporanTanggalExport implements FromCollection, WithHeadings
                 return [
                     'Nama Santri' => $loan->user->nama,
                     'Judul Buku' => $loan->book->judul,
-                    'Tanggal Pinjam' => $loan->tanggal_pinjam,
-                    'Tanggal Tenggat' => $loan->tanggal_tenggat,
-                    'Tanggal Kembali' => $loan->tanggal_kembali ?? '-',
+                    'Tanggal Pinjam' => Carbon::parse($loan->tanggal_pinjam)->translatedFormat('j F Y'),
+                    'Tanggal Tenggat' => Carbon::parse($loan->tanggal_tenggat)->translatedFormat('j F Y'),
+                    'Tanggal Kembali' => $loan->tanggal_kembali
+                        ? Carbon::parse($loan->tanggal_kembali)->translatedFormat('j F Y')
+                        : '-',
                     'Status' => ucfirst($loan->status),
                 ];
             });

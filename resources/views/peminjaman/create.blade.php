@@ -35,6 +35,24 @@
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
+
+                {{-- TOMBOL SANTRI --}}
+                <div class="mt-4">
+                    <label class="form-label fw-semibold">Atau pilih langsung dari daftar santri berikut:</label>
+
+                    <div class="d-flex flex-wrap gap-2 mt-2">
+                        @foreach ($users->where('peran', 'santri')->sortBy('nama') as $user)
+                            <button type="button" class="btn btn-outline-success btn-sm"
+                                onclick="pilihSantri('{{ $user->id }}', '{{ $user->nama }}')">
+                                {{ $user->nama }}
+                            </button>
+                        @endforeach
+                    </div>
+                </div>
+
+
+
+
             </div>
         </div>
 
@@ -45,10 +63,11 @@
                 <input type="text" id="tanggal_pinjam" name="tanggal_pinjam" class="form-control" required>
             </div>
 
-            <div class="col-md-4 mb-3">
-                <label>Tanggal Kembali</label>
+            <div class="input-group">
                 <input type="text" id="tanggal_kembali" name="tanggal_kembali" class="form-control">
+                <button type="button" class="btn btn-outline-secondary" onclick="setKembaliHariIni()">Hari Ini</button>
             </div>
+
 
             <div class="col-md-4 mb-3">
                 <label>Status</label>
@@ -59,6 +78,8 @@
                 </select>
             </div>
         </div>
+
+
 
         <button type="submit" class="btn btn-primary">Simpan</button>
         <a href="{{ route('peminjaman.index') }}" class="btn btn-secondary">Kembali</a>
@@ -91,19 +112,22 @@
                             </tr>
                         </thead>
                         <tbody id="santriTableBody">
-                            @foreach ($users->where('peran', 'santri') as $user)
-                                <tr>
-                                    <td class="nama">{{ $user->nama }}</td>
-                                    <td class="kelas">{{ $user->kelas }}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-sm btn-primary"
-                                            onclick="pilihSantri('{{ $user->id }}', '{{ $user->nama }}')">
-                                            Pilih
-                                        </button>
-                                    </td>
-                                </tr>
+                            @foreach ($santriPerKelas as $kelas => $users)
+                                @foreach ($users as $user)
+                                    <tr>
+                                        <td class="nama">{{ $user->nama }}</td>
+                                        <td class="kelas">{{ $user->kelas }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-primary"
+                                                onclick="pilihSantri('{{ $user->id }}', '{{ $user->nama }}')">
+                                                Pilih
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             @endforeach
                         </tbody>
+
                     </table>
 
                 </div>
@@ -112,74 +136,78 @@
     </div>
 
 @endsection
+@push('styles')
+    <style>
+        .btn-santri {
+            border: 1px solid #4CAF50;
+            color: #4CAF50;
+            font-weight: 500;
+            padding: 4px 10px;
+            font-size: 0.85rem;
+            border-radius: 6px;
+            background-color: white;
+            transition: 0.2s ease;
+        }
+
+        .btn-santri:hover,
+        .btn-santri:focus {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+@endpush
+
 @push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const today = new Date();
-            const tujuhHari = new Date();
-            tujuhHari.setDate(today.getDate() + 7);
-
-            flatpickr("#tanggal_pinjam", {
-                dateFormat: "Y-m-d",
-                defaultDate: today,
-                onChange: function(selectedDates, dateStr, instance) {
-                    // auto set tanggal kembali ke 7 hari dari pinjam
-                    const kembaliDate = new Date(selectedDates[0]);
-                    kembaliDate.setDate(kembaliDate.getDate() + 7);
-                    tanggalKembaliInstance.setDate(kembaliDate);
-                }
-            });
-
-            const tanggalKembaliInstance = flatpickr("#tanggal_kembali", {
-                dateFormat: "Y-m-d",
-                defaultDate: tujuhHari,
-            });
+        // Inisialisasi flatpickr untuk tanggal pinjam dan tanggal kembali
+        flatpickr("#tanggal_pinjam", {
+            dateFormat: "Y-m-d",
+            defaultDate: "today"
         });
 
-        document.addEventListener('DOMContentLoaded', function() {
-            document.addEventListener('keydown', function(e) {
-                // Jika hanya tombol Ctrl ditekan
-                if (e.ctrlKey && !e.shiftKey && !e.altKey && e.code === 'ControlLeft') {
-                    e.preventDefault(); // opsional, untuk cegah konflik
-                    document.getElementById('book_id').focus();
-                }
-
-                // Atau: tekan kombinasi Ctrl + B (misalnya)
-                if (e.ctrlKey && e.key.toLowerCase() === 'b') {
-                    e.preventDefault();
-                    document.getElementById('book_id').focus();
-                }
-            });
+        flatpickr("#tanggal_kembali", {
+            dateFormat: "Y-m-d",
+            defaultDate: "today"
         });
 
+        // Fungsi shortcut: kembalikan hari ini
+        function setKembaliHariIni() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('tanggal_kembali').value = today;
+        }
+
+        // Shortcut Ctrl atau Ctrl+B untuk fokus ke input ID Buku
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey && !e.shiftKey && !e.altKey && e.code === 'ControlLeft') ||
+                (e.ctrlKey && e.key.toLowerCase() === 'b')) {
+                e.preventDefault();
+                document.getElementById('book_id').focus();
+            }
+        });
+
+        // Fungsi memilih santri dari daftar atau modal
         function pilihSantri(id, nama) {
-            console.log("Santri dipilih:", id, nama);
             document.getElementById('user_id').value = id;
             document.getElementById('user_nama').value = nama;
             var modal = bootstrap.Modal.getInstance(document.getElementById('modalCariSantri'));
             modal.hide();
         }
-        // Filter baris santri berdasarkan input
+
+        // Filter santri saat mengetik di kolom pencarian modal
         document.getElementById('searchSantriInput').addEventListener('keyup', function() {
             const search = this.value.toLowerCase();
             const rows = document.querySelectorAll('#santriTableBody tr');
-
             rows.forEach(row => {
                 const nama = row.querySelector('.nama').textContent.toLowerCase();
                 const kelas = row.querySelector('.kelas').textContent.toLowerCase();
-                if (nama.includes(search) || kelas.includes(search)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
+                row.style.display = nama.includes(search) || kelas.includes(search) ? '' : 'none';
             });
         });
 
-
+        // Cari detail buku berdasarkan input ID buku
         function cariBuku() {
             const id = document.getElementById('book_id').value;
             const pesan = document.getElementById('pesan_buku');
-
             if (id.length > 0) {
                 fetch(`/api/buku/${id}`)
                     .then(res => res.json())

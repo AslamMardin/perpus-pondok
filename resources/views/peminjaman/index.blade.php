@@ -11,16 +11,17 @@
     {{-- Filter dan Tombol Catat --}}
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
         {{-- Form Filter --}}
-        <form method="GET" action="{{ route('peminjaman.index') }}" class="d-flex align-items-center gap-2">
+        <form method="GET" action="{{ route('peminjaman.index') }}" class="d-flex align-items-center gap-2 flex-wrap">
             <select name="filter" class="form-select w-auto">
                 <option value="">-- Semua Status --</option>
-                <option value="terlambat" {{ request('filter') == 'terlambat' ? 'selected' : '' }}>Terlambat</option>
-                <option value="dipinjam" {{ request('filter') == 'dipinjam' ? 'selected' : '' }}>Dipinjam</option>
-                <option value="dikembalikan" {{ request('filter') == 'dikembalikan' ? 'selected' : '' }}>Dikembalikan
+                <option value="dipinjam" {{ request('filter') == 'dipinjam' ? 'selected' : '' }}>📅 Dipinjam</option>
+                <option value="dikembalikan" {{ request('filter') == 'dikembalikan' ? 'selected' : '' }}>📅 Dikembalikan
                 </option>
+                <option value="hari_ini" {{ request('filter') == 'hari_ini' ? 'selected' : '' }}>📅 Pinjam Hari Ini</option>
             </select>
             <button type="submit" class="btn btn-outline-success btn-sm">Filter</button>
         </form>
+
 
         {{-- Tombol Catat --}}
         <a href="{{ route('peminjaman.create') }}" class="btn btn-primary">
@@ -50,7 +51,13 @@
                         <td>{{ $i + 1 }}</td>
                         <td>{{ $loan->user->nama }}</td>
                         <td>{{ $loan->book->judul }}</td>
-                        <td>{{ \Carbon\Carbon::parse($loan->tanggal_pinjam)->translatedFormat('d M Y') }}</td>
+                        <td>
+                            {{ \Carbon\Carbon::parse($loan->tanggal_pinjam)->translatedFormat('d M Y') }}
+                            @if (\Carbon\Carbon::parse($loan->tanggal_pinjam)->isToday())
+                                <span class="badge bg-info text-dark ms-1">Pinjam Hari Ini</span>
+                            @endif
+                        </td>
+
                         <td>{{ \Carbon\Carbon::parse($loan->tanggal_tenggat)->translatedFormat('d M Y') }}</td>
 
                         <td>
@@ -63,7 +70,7 @@
                         <td>
                             @if ($loan->tanggal_kembali && $loan->tanggal_kembali > $loan->tanggal_tenggat)
                                 <span class="badge bg-danger">Terlambat</span>
-                            @elseif ($loan->status == 'dipinjam' && now()->gt($loan->tanggal_tenggat))
+                            @elseif ($loan->status == 'dipinjam' && $loan->tanggal_tenggat && now()->gt($loan->tanggal_tenggat))
                                 <span class="badge bg-danger">Terlambat</span>
                             @else
                                 <span class="badge bg-success">Tepat Waktu</span>
@@ -96,6 +103,10 @@
                 @endforelse
             </tbody>
         </table>
+        <div class="mt-3">
+            {{ $loans->withQueryString()->links() }}
+        </div>
+
 
     </div>
 @endsection

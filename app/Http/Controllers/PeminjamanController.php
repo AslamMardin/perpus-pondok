@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Book;
 use App\Models\Loan;
 use App\Models\User;
-use App\Models\Book;
 use Illuminate\Http\Request;
 
 class PeminjamanController extends Controller
 {
-    public function index(Request $request)
+   public function index(Request $request)
 {
     $query = Loan::with(['user', 'book']);
 
@@ -20,37 +21,58 @@ class PeminjamanController extends Controller
         $query->where('status', 'dipinjam');
     } elseif ($request->filter == 'dikembalikan') {
         $query->where('status', 'dikembalikan');
+    } elseif ($request->filter == 'hari_ini') {
+        $query->whereDate('tanggal_pinjam', today());
     }
 
-    $loans = $query->latest()->get();
+    $loans = $query->latest()->paginate(10); // Sudah benar: pagination 10 per halaman
 
     return view('peminjaman.index', compact('loans'));
 }
 
-    public function create()
-    {
-        $users = User::all();
-        $books = Book::all();
-        return view('peminjaman.create', compact('users', 'books'));
-    }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'book_id' => 'required|exists:books,id',
-            'tanggal_pinjam' => 'required|date',
-        ]);
+ public function create()
+{
+    // Ambil semua santri
+    $users = User::where('peran', 'santri')->orderBy('kelas')->orderBy('nama')->get();
 
-        Loan::create([
-            'user_id' => $request->user_id,
-            'book_id' => $request->book_id,
-            'tanggal_pinjam' => $request->tanggal_pinjam,
-            'status' => 'dipinjam',
-        ]);
+    // Kelompokkan berdasarkan kelas (kelas bisa 7 A SMP, dst)
+    $kelasUrut = $users->pluck('kelas')->unique()->values()->all();
 
-        return redirect()->route('peminjaman.index')->with('success', 'Peminjaman berhasil dicatat.');
-    }
+    // Kelompokkan user per kelas
+    $santriPerKelas = $users->groupBy('kelas');
+
+    return view('peminjaman.create', compact('users', 'kelasUrut', 'santriPerKelas'));
+}
+
+
+
+   public function store(Request $request)
+{
+    $request->validate([
+        'user_id' => 'required|exists:users,id',
+        'book_id' => 'required|exists:books,id',
+        'tanggal_pinjam' => 'required|date',
+        'tanggal_kembali' => 'nullable|date',
+        'status' => 'required|in:dipinjam,dikembalikan',
+    ]);
+
+    $tanggalPinjam = \Carbon\Carbon::parse($request->tanggal_pinjam);
+    $tanggalTenggat = $tanggalPinjam->copy()->addDays(7); // tenggat = 7 hari
+
+    Loan::create([
+        'user_id' => $request->user_id,
+        'book_id' => $request->book_id,
+        'tanggal_pinjam' => $tanggalPinjam,
+        'tanggal_tenggat' => $tanggalTenggat,
+        'tanggal_kembali' => $request->tanggal_kembali,
+        'status' => $request->status,
+    ]);
+
+    return redirect()->route('peminjaman.index')->with('success', 'Peminjaman berhasil dicatat.');
+}
+
+
 
     public function edit(Loan $peminjaman)
     {
@@ -97,18 +119,32 @@ class PeminjamanController extends Controller
 
 public function riwayat(Request $request)
 {
-    $kelas = $request->kelas;
     $query = Loan::with(['user', 'book'])
-                ->where('status', 'dikembalikan')
-                ->when($kelas, fn($q) => $q->whereHas('user', fn($uq) => $uq->where('kelas', $kelas)))
-                ->orderByDesc('tanggal_kembali');
+        ->where('status', 'dikembalikan'); // Ambil hanya yang sudah dikembalikan
 
-    $loans = $query->get();
+  
+    // Filter keterlambatan
+    if ($request->tanggal == 'terlambat') {
+        $query->whereColumn('tanggal_kembali', '>', 'tanggal_tenggat');
+    }
 
-    $daftarKelas = User::whereNotNull('kelas')->distinct()->pluck('kelas');
+    // Filter kelas
+    if ($request->kelas) {
+        $query->whereHas('user', function ($q) use ($request) {
+            $q->where('kelas', $request->kelas);
+        });
+    }
 
-    return view('peminjaman.riwayat', compact('loans', 'daftarKelas', 'kelas'));
+    $loans = $query->orderByDesc('tanggal_kembali')->paginate(10);
+
+    // Ambil daftar kelas unik dari user
+    $daftarKelas = User::select('kelas')->distinct()->pluck('kelas')->filter()->values();
+
+    return view('peminjaman.riwayat', compact('loans', 'daftarKelas'));
 }
+
+
+
 
 
 }

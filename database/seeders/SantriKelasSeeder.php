@@ -12,30 +12,54 @@ class SantriKelasSeeder extends Seeder
     {
         $kelasList = [];
 
-        foreach (range('A', 'D') as $huruf) {
-            $kelasList[] = "7 $huruf";
-            $kelasList[] = "8 $huruf";
+        // Jenjang MTs & SMP untuk kelas 7 - 9
+        $jenjangs = ['SMP', 'MTs'];
+        $kelasRange = [
+            7 => ['A', 'B', 'C', 'D'],
+            8 => ['A', 'B', 'C', 'D'],
+            9 => ['A', 'B', 'C']
+        ];
+
+        foreach ($kelasRange as $tingkat => $hurufList) {
+            foreach ($hurufList as $huruf) {
+                foreach ($jenjangs as $jenjang) {
+                    $kelasList[] = [
+                        'kelas' => "$tingkat $huruf",
+                        'jenjang' => $jenjang,
+                    ];
+                }
+            }
         }
 
-        foreach (range('A', 'C') as $huruf) {
-            $kelasList[] = "9 $huruf";
-        }
-
+        // Kelas MA (10-12)
         foreach (range(1, 4) as $i) {
-            $kelasList[] = "10 Merdeka $i";
-            $kelasList[] = "11 Merdeka $i";
+            $kelasList[] = [
+                'kelas' => "10 Merdeka $i",
+                'jenjang' => 'MA',
+            ];
+            $kelasList[] = [
+                'kelas' => "11 Merdeka $i",
+                'jenjang' => 'MA',
+            ];
         }
 
         foreach (range(1, 3) as $i) {
-            $kelasList[] = "12 Mipa $i";
+            $kelasList[] = [
+                'kelas' => "12 Mipa $i",
+                'jenjang' => 'MA',
+            ];
         }
 
-        foreach ($kelasList as $kelas) {
+        // Insert ke tabel users
+        foreach ($kelasList as $item) {
+            $kelasLengkap = $item['kelas'] . ' ' . $item['jenjang'];
+            $username = strtolower(str_replace([' ', '-'], '_', $kelasLengkap));
+
             DB::table('users')->insert([
-                'nama' => $kelas,
-                'username' => strtolower(str_replace(' ', '_', $kelas)),
+                'nama' => $kelasLengkap,
+                'username' => $username,
                 'password' => Hash::make('12345678'),
-                'kelas' => $kelas,
+                'kelas' => $kelasLengkap,
                 'peran' => 'santri',
                 'created_at' => now(),
                 'updated_at' => now(),

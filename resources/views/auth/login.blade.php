@@ -149,12 +149,13 @@
     <div class="login-container">
         <div class="login-card">
             <div class="logo-container">
-                <div class="logo-placeholder">
-                    <i class="fas fa-book"></i>
-                </div>
-                <h2 class="login-title">Login Perpustakaan Santri</h2>
+                <img src="{{ asset('img/logo.png') }}" alt="Logo PPM" class="rounded-circle mb-3 shadow"
+                    style="width: 80px; height: 80px; object-fit: cover;">
+
+                <h2 class="login-title">Login Perpustakaan</h2>
                 <p class="login-subtitle">PPM Al-Ikhlash Lampoko</p>
             </div>
+
 
             @if ($errors->any())
                 <div class="alert alert-danger">

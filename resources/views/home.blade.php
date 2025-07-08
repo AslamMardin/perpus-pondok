@@ -15,14 +15,17 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col-md-8">
-                    <h1 class="mb-0">
-                        <i class="fas fa-book-open me-3"></i>
-                        Daftar Peminjam Buku Hari Ini
-                    </h1>
-                    <p class="mb-0 mt-2 opacity-75">
-                        PPM Al-Ikhlash Lampoko - {{ date('d F Y') }}
-                    </p>
+                    <div class="d-flex align-items-center mb-2">
+                        <img src="{{ asset('img/logo.png') }}" alt="Logo PPM" class="rounded-circle me-3"
+                            style="width: 60px; height: 60px; object-fit: cover;">
+
+                        <div>
+                            <h4 class="mb-0 fw-bold">Daftar Peminjam Buku Hari Ini</h4>
+                            <p class="mb-0 text-muted">PPM Al-Ikhlash Lampoko - {{ date('d F Y') }}</p>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="col-md-4 text-end">
                     @if (Auth::check())
                         <!-- Jika Sudah Login -->
@@ -123,16 +126,17 @@
                                 <tbody>
                                     @forelse ($loans as $i => $loan)
                                         @php
-                                            $status = 'dipinjam';
-                                            if ($loan->tanggal_kembali) {
-                                                $status = 'dikembalikan';
-                                            } elseif (
+                                            $status = $loan->status;
+
+                                            if (
+                                                $status === 'dipinjam' &&
                                                 $loan->tanggal_tenggat &&
-                                                strtotime($loan->tanggal_tenggat) < time()
+                                                \Carbon\Carbon::parse($loan->tanggal_tenggat)->isPast()
                                             ) {
                                                 $status = 'terlambat';
                                             }
                                         @endphp
+
                                         <tr>
                                             <td class="text-center">{{ $i + 1 }}</td>
                                             <td>
@@ -143,7 +147,8 @@
                                                     </div>
                                                     <div>
                                                         <h6 class="mb-0">{{ $loan->user->nama }}</h6>
-                                                        <small class="text-muted">{{ $loan->user->username ?? '-' }}</small>
+                                                        <small
+                                                            class="text-muted">{{ $loan->user->username ?? '-' }}</small>
                                                     </div>
                                                 </div>
                                             </td>
@@ -157,16 +162,18 @@
                                                     <small class="text-muted">{{ $loan->book->kategori ?? '-' }}</small>
                                                 </div>
                                             </td>
-                                            <td class="text-center">{{ date('d/m/Y', strtotime($loan->tanggal_pinjam)) }}
+                                            <td class="text-center">
+                                                {{ \Carbon\Carbon::parse($loan->tanggal_pinjam)->translatedFormat('d F Y') }}
                                             </td>
+
                                             <td class="text-center">
                                                 <span class="status-badge status-{{ $status }}">
-                                                    @if ($status == 'dipinjam')
-                                                        <i class="fas fa-clock me-1"></i>Dipinjam
-                                                    @elseif ($status == 'dikembalikan')
-                                                        <i class="fas fa-check-circle me-1"></i>Dikembalikan
-                                                    @else
-                                                        <i class="fas fa-exclamation-triangle me-1"></i>Terlambat
+                                                    @if ($status === 'dipinjam')
+                                                        <i class="fas fa-clock me-1"></i> Dipinjam
+                                                    @elseif ($status === 'dikembalikan')
+                                                        <i class="fas fa-check-circle me-1"></i> Dikembalikan
+                                                    @elseif ($status === 'terlambat')
+                                                        <i class="fas fa-exclamation-triangle me-1"></i> Terlambat
                                                     @endif
                                                 </span>
                                             </td>
@@ -180,6 +187,7 @@
                                         </tr>
                                     @endforelse
                                 </tbody>
+
 
                             </table>
 

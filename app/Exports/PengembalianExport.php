@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Loan;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
@@ -15,11 +16,13 @@ class PengembalianExport implements FromCollection, WithHeadings
             ->get()
             ->map(function ($loan) {
                 return [
-                    'nama_santri' => $loan->user->nama,
-                    'judul_buku' => $loan->book->judul,
-                    'tanggal_pinjam' => $loan->tanggal_pinjam,
-                    'tanggal_kembali' => $loan->tanggal_kembali,
-                    'status' => $loan->status,
+                    'Nama Santri' => $loan->user->nama,
+                    'Judul Buku' => $loan->book->judul,
+                    'Tanggal Pinjam' => Carbon::parse($loan->tanggal_pinjam)->translatedFormat('j F Y'),
+                    'Tanggal Kembali' => $loan->tanggal_kembali
+                        ? Carbon::parse($loan->tanggal_kembali)->translatedFormat('j F Y')
+                        : '-',
+                    'Status' => ucfirst($loan->status),
                 ];
             });
     }
@@ -35,4 +38,3 @@ class PengembalianExport implements FromCollection, WithHeadings
         ];
     }
 }
-

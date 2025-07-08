@@ -17,9 +17,7 @@ class AdminController extends Controller
         $totalBooks = Book::count();
         $totalUsers = User::count();
         $borrowedBooks = Loan::where('status', 'dipinjam')->count();
-        $lateReturns = Loan::where('status', 'dipinjam')
-            ->where('tanggal_tenggat', '<', now()->toDateString())
-            ->count();
+
 
         // Ambil hanya aktivitas yang terjadi hari ini (pinjam atau kembali)
         $recentLoans = Loan::with(['user', 'book'])
@@ -34,7 +32,7 @@ class AdminController extends Controller
             'totalBooks',
             'totalUsers',
             'borrowedBooks',
-            'lateReturns',
+   
             'recentLoans'
         ));
     }

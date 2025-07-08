@@ -30,18 +30,6 @@
     <!-- Submenu Laporan -->
     <div class="collapse {{ request()->routeIs('laporan.*') ? 'show' : '' }}" id="submenuLaporan">
         <nav class="nav flex-column ms-4">
-            <a class="nav-link {{ request()->routeIs('laporan.peminjaman') ? 'active' : '' }}"
-                href="{{ route('laporan.peminjaman') }}">
-                Laporan Peminjaman
-            </a>
-            <a class="nav-link {{ request()->routeIs('laporan.pengembalian') ? 'active' : '' }}"
-                href="{{ route('laporan.pengembalian') }}">
-                Laporan Pengembalian
-            </a>
-            <a class="nav-link {{ request()->routeIs('laporan.terlambat') ? 'active' : '' }}"
-                href="{{ route('laporan.terlambat') }}">
-                Laporan Terlambat
-            </a>
             <a class="nav-link {{ request()->routeIs('laporan.tanggal') ? 'active' : '' }}"
                 href="{{ route('laporan.tanggal') }}">
                 Berdasarkan Tanggal/Bulan/Tahun
@@ -50,6 +38,19 @@
                 href="{{ route('laporan.santri') }}">
                 Per Santri / Per Buku
             </a>
+            <a class="nav-link {{ request()->routeIs('laporan.peminjaman') ? 'active' : '' }}"
+                href="{{ route('laporan.peminjaman') }}">
+                Peminjaman
+            </a>
+            <a class="nav-link {{ request()->routeIs('laporan.pengembalian') ? 'active' : '' }}"
+                href="{{ route('laporan.pengembalian') }}">
+                Pengembalian
+            </a>
+            <a class="nav-link {{ request()->routeIs('laporan.terlambat') ? 'active' : '' }}"
+                href="{{ route('laporan.terlambat') }}">
+                Terlambat
+            </a>
+
         </nav>
     </div>
 

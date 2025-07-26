@@ -172,13 +172,26 @@
         document.addEventListener('keydown', function(e) {
             const bookInput = document.getElementById('book_id');
 
-            // Tekan Ctrl (sendiri) ATAU Ctrl+B
+            // Tekan Ctrl sendiri atau Ctrl + B
             if ((e.ctrlKey && e.code === 'ControlLeft') || (e.ctrlKey && e.key.toLowerCase() === 'b')) {
                 e.preventDefault();
-                bookInput.focus();
-                bookInput.value = ''; // Kosongkan isinya
+
+                // Tampilkan SweetAlert dulu
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Silakan Scan',
+                    text: 'Silakan scan bukunya sekarang',
+                    timer: 2000,
+                    showConfirmButton: false,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        bookInput.focus();
+                        bookInput.value = '';
+                    }
+                });
             }
         });
+
 
         // Fungsi memilih santri dari daftar atau modal
         function pilihSantri(id, nama) {

@@ -19,66 +19,40 @@
     <style>
         @font-face {
             font-family: 'Poppins';
-            src: url('fonts/poppins-v23-latin-300.woff2') format('woff2');
+            src: url('{{ asset('fonts/poppins-v23-latin-300.woff2') }}') format('woff2');
             font-weight: 300;
             font-style: normal;
         }
 
         @font-face {
             font-family: 'Poppins';
-            src: url('fonts/poppins-v23-latin-500.woff2') format('woff2');
-            font-weight: 500;
-            font-style: normal;
-        }
-
-        @font-face {
-            font-family: 'Poppins';
-            src: url('fonts/poppins-v23-latin-500italic.woff2') format('woff2');
-            font-weight: 500;
-            font-style: italic;
-        }
-
-        @font-face {
-            font-family: 'Poppins';
-            src: url('fonts/poppins-v23-latin-600.woff2') format('woff2');
-            font-weight: 600;
-            font-style: normal;
-        }
-
-        @font-face {
-            font-family: 'Poppins';
-            src: url('fonts/poppins-v23-latin-600italic.woff2') format('woff2');
-            font-weight: 600;
-            font-style: italic;
-        }
-
-        @font-face {
-            font-family: 'Poppins';
-            src: url('fonts/poppins-v23-latin-700.woff2') format('woff2');
-            font-weight: 700;
-            font-style: normal;
-        }
-
-        @font-face {
-            font-family: 'Poppins';
-            src: url('fonts/poppins-v23-latin-700italic.woff2') format('woff2');
-            font-weight: 700;
-            font-style: italic;
-        }
-
-        @font-face {
-            font-family: 'Poppins';
-            src: url('fonts/poppins-v23-latin-regular.woff2') format('woff2');
+            src: url('{{ asset('fonts/poppins-v23-latin-400.woff2') }}') format('woff2');
             font-weight: 400;
             font-style: normal;
         }
 
         @font-face {
             font-family: 'Poppins';
-            src: url('fonts/poppins-v23-latin-italic.woff2') format('woff2');
-            font-weight: 400;
-            font-style: italic;
+            src: url('{{ asset('fonts/poppins-v23-latin-500.woff2') }}') format('woff2');
+            font-weight: 500;
+            font-style: normal;
         }
+
+        @font-face {
+            font-family: 'Poppins';
+            src: url('{{ asset('fonts/poppins-v23-latin-600.woff2') }}') format('woff2');
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Poppins';
+            src: url('{{ asset('fonts/poppins-v23-latin-700.woff2') }}') format('woff2');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+
 
         :root {
             --primary-green: #4CAF50;
@@ -346,9 +320,9 @@
     <!-- Bootstrap Bundle JS (Offline) -->
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <!-- Flatpickr JS (Offline) -->
-    <script src="{{ asset('js/flatpickr.min.js') }}"></script>
+    <script src="{{ asset('js/flatpickr.js') }}"></script>
     <!-- SweetAlert2 JS (Offline) -->
-    <script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ asset('js/sweetalert2@11.js') }}"></script>
     <script>
         function confirmLogout() {
             Swal.fire({

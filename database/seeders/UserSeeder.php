@@ -17,6 +17,13 @@ class UserSeeder extends Seeder
             'peran' => 'admin',
         ]);
 
+          User::create([
+            'nama' => 'Aslam Mardin, S.Pd',
+            'username' => 'aslam',
+            'password' => Hash::make('aslam123'),
+            'peran' => 'admin',
+        ]);
+
        
     }
 }

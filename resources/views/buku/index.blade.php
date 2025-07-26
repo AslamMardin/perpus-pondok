@@ -31,6 +31,19 @@
     </form>
     <div class="table-responsive">
         <!-- Tombol Generate Semua Barcode -->
+        @php
+            $daftarRak = [
+                'A1' => 'A1 - Agama Dasar',
+                'A2' => 'A2 - Kitab Kuning',
+                'B1' => 'B1 - Bahasa Arab',
+                'B2' => 'B2 - Bahasa Inggris',
+                'F1' => 'F1 - Formal Pelajaran',
+                'N1' => 'N1 - Novel Islami',
+                'R1' => 'R1 - Referensi (Kamus, Ensiklopedia)',
+                'S1' => 'S1 - Sejarah & Biografi',
+                'dll' => 'Lain-Lain',
+            ];
+        @endphp
 
 
         <table class="table table-hover">
@@ -49,7 +62,7 @@
                         <td>{{ $i + 1 }}</td>
                         <td>{{ $book->judul }}</td>
                         <td>{{ $book->kategori }}</td>
-                        <td>{{ $book->rak }}</td>
+                        <td>{{ $daftarRak[$book->rak] ?? $book->rak }}</td>
                         <td>
                             <a href="{{ route('buku.edit', $book->id) }}" class="btn btn-sm btn-warning">
                                 <i class="fas fa-edit"></i>

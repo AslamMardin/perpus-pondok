@@ -25,7 +25,6 @@
                 <tr>
                     <th>#</th>
                     <th>Nama</th>
-                    <th>Username</th>
                     <th>Kelas</th>
                     <th>Peran</th>
                     <th>Aksi</th>
@@ -36,7 +35,6 @@
                     <tr>
                         <td>{{ $i + 1 }}</td>
                         <td>{{ $user->nama }}</td>
-                        <td>{{ $user->username }}</td>
                         <td>{{ $user->kelas ?? '-' }}</td>
                         <td>{{ ucfirst($user->peran) }}</td>
                         <td>

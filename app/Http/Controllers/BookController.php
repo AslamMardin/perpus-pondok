@@ -78,14 +78,37 @@ public function showBarcode(Book $buku, Request $request)
     $jumlah = $request->get('jumlah', 1); // default 1 jika tidak diisi
     $barcodeSvg = QrCode::size(300)->generate($buku->id);
 
-    return view('buku.barcode-view', compact('buku', 'barcodeSvg', 'jumlah'));
+    $daftarRak = [
+        'A1' => 'A1 - Agama Dasar',
+        'A2' => 'A2 - Kitab Kuning',
+        'B1' => 'B1 - Bahasa Arab',
+        'B2' => 'B2 - Bahasa Inggris',
+        'F1' => 'F1 - Formal Pelajaran',
+        'N1' => 'N1 - Novel Islami',
+        'R1' => 'R1 - Referensi (Kamus, Ensiklopedia)',
+        'S1' => 'S1 - Sejarah & Biografi',
+        'dll' => 'Lain-Lain',
+    ];
+
+    return view('buku.barcode-view', compact('buku', 'barcodeSvg', 'jumlah', 'daftarRak'));
 }
 
 
 public function barcodeSemua()
 {
+    $daftarRak = [
+        'A1' => 'A1 - Agama Dasar',
+        'A2' => 'A2 - Kitab Kuning',
+        'B1' => 'B1 - Bahasa Arab',
+        'B2' => 'B2 - Bahasa Inggris',
+        'F1' => 'F1 - Formal Pelajaran',
+        'N1' => 'N1 - Novel Islami',
+        'R1' => 'R1 - Referensi (Kamus, Ensiklopedia)',
+        'S1' => 'S1 - Sejarah & Biografi',
+        'dll' => 'Lain-Lain',
+    ];
     $books = \App\Models\Book::orderBy('judul')->get();
-    return view('buku.barcode-semua', compact('books'));
+    return view('buku.barcode-semua', compact('books', 'daftarRak'));
 }
 
 

@@ -86,6 +86,11 @@
         .print-btn:hover {
             background: #218838;
         }
+
+        .text-label {
+            font-size: 10px !important;
+            font-weight: bold
+        }
     </style>
 </head>
 
@@ -95,7 +100,7 @@
         <button onclick="window.print()" class="print-btn">🖨️ Cetak Barcode</button>
     </div>
 
-    <div class="header">
+    <div class="header no-print">
         <img src="{{ asset('img/logo.png') }}" class="logo" alt="Logo Pondok">
         <h2 class="title">PPM AL-IKHLASH LAMPOKO</h2>
         <h4>Daftar Barcode Semua Buku</h4>
@@ -107,12 +112,18 @@
                 @foreach ($chunk as $book)
                     <td>
                         <div class="barcode-box">
-                            <div>{!! QrCode::size(100)->generate($book->id) !!}</div>
+                            <div class="text-center">
+
+                                <div>{!! QrCode::size(90)->generate($book->id) !!}</div>
+                                <strong>ID:</strong> {{ $book->id }}
+                            </div>
                             <div class="details">
+                                <img src="{{ asset('img/logo.png') }}" alt="Logo Pondok" style="height: 40px;"
+                                    class="mb-2">
+                                <div class="text-label fw-bold text-uppercase small">BUKU PPM AL-IKHLASH LAMPOKO</div>
                                 <strong>Judul:</strong> {{ $book->judul }}<br>
                                 <strong>Kategori:</strong> {{ $book->kategori }}<br>
-                                <strong>Rak:</strong> {{ $book->rak ?? '-' }}<br>
-                                <strong>ID:</strong> {{ $book->id }}
+                                <strong>Rak:</strong> {{ $daftarRak[$book->rak] ?? $book->rak }}<br>
                             </div>
                         </div>
                     </td>

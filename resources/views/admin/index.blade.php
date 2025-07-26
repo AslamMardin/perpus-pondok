@@ -75,7 +75,7 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0">
                                     <i class="fas fa-clock me-2 text-primary"></i>
-                                    Aktivitas Hari Ini
+                                    Pinjaman Hari Ini
                                 </h5>
 
                             </div>

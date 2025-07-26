@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
         ]);
 
           User::create([
-            'nama' => 'Aslam Mardin, S.Pd',
+            'nama' => 'Aslam Mardin, S.Kom',
             'username' => 'aslam',
             'password' => Hash::make('aslam123'),
             'peran' => 'admin',

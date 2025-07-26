@@ -159,7 +159,7 @@
 
             @if ($errors->any())
                 <div class="alert alert-danger">
-                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
                     {{ $errors->first() }}
                 </div>
             @endif

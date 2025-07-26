@@ -50,7 +50,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('buku', BookController::class)->parameters(['buku' => 'buku'])->except(['show']);
     Route::get('buku/{buku}/barcode', [BookController::class, 'showBarcode'])->name('buku.barcode');
     Route::get('buku/barcode-semua', [BookController::class, 'barcodeSemua'])->name('buku.barcode-semua');
-    
+    Route::get('buku/{buku}/barcode', [BookController::class, 'showBarcode'])->name('buku.barcode');
+
 
     Route::resource('pengguna', PenggunaController::class)->parameters(['pengguna' => 'pengguna']);
     Route::resource('peminjaman', PeminjamanController::class)->parameters(['peminjaman' => 'peminjaman']);

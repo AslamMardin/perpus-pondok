@@ -55,10 +55,12 @@
                                 <i class="fas fa-edit"></i>
                             </a>
 
-                            <a href="{{ route('buku.barcode', $book->id) }}" class="btn btn-sm btn-info"
-                                title="Lihat Barcode">
+                            <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal"
+                                data-bs-target="#modalBarcode" data-id="{{ $book->id }}"
+                                data-judul="{{ $book->judul }}">
                                 <i class="fas fa-qrcode"></i> Barcode
-                            </a>
+                            </button>
+
                             <form action="{{ route('buku.destroy', $book->id) }}" method="POST" style="display:inline">
                                 @csrf @method('DELETE')
                                 <button class="btn btn-sm btn-danger" onclick="return confirm('Yakin?')">
@@ -78,6 +80,33 @@
             </tbody>
 
         </table>
+
+        <!-- Modal Input Jumlah Barcode -->
+        <div class="modal fade" id="modalBarcode" tabindex="-1" aria-labelledby="modalBarcodeLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <form id="barcodeForm" method="GET">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalBarcodeLabel">Cetak Barcode</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Masukkan jumlah barcode yang ingin dicetak untuk buku: <strong id="judulBuku"></strong></p>
+                            <div class="mb-3">
+                                <label for="jumlah" class="form-label">Jumlah Barcode</label>
+                                <input type="number" name="jumlah" id="jumlah" class="form-control" min="1"
+                                    value="1" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary">Cetak</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
     </div>
 
 
@@ -144,3 +173,21 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        const modalBarcode = document.getElementById('modalBarcode');
+        modalBarcode.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const bookId = button.getAttribute('data-id');
+            const judul = button.getAttribute('data-judul');
+
+            // Set judul buku di modal
+            modalBarcode.querySelector('#judulBuku').textContent = judul;
+
+            // Set action form ke route yang benar
+            const form = modalBarcode.querySelector('#barcodeForm');
+            form.action = `/buku/${bookId}/barcode`; // ganti jika route Anda berbeda
+        });
+    </script>
+@endpush

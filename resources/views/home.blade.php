@@ -5,7 +5,8 @@
 @section('content')
     @if (session('status'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="fas fa-check-circle me-2"></i>
+            <i class="bi bi-person-circle me-1"></i>
+
             {{ session('status') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -38,12 +39,14 @@
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li>
                                     <a class="dropdown-item" href="{{ route('dashboard') }}">
-                                        <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                                        <i class="bi bi-speedometer2 me-2"></i> Dashboard
+
                                     </a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item text-danger" href="#" onclick="confirmLogout()">
-                                        <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                        <i class="bi bi-box-arrow-right me-2 text-danger"></i> Logout
+
                                     </a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
@@ -54,8 +57,8 @@
                     @else
                         <!-- Jika Belum Login -->
                         <a href="{{ route('login') }}" class="btn btn-light">
-                            <i class="fas fa-sign-in-alt me-2"></i>
-                            Login Admin
+                            <i class="bi bi-box-arrow-in-right me-2"></i> Login Admin
+
                         </a>
                     @endif
 
@@ -72,7 +75,7 @@
                             <div class="col-md-6">
                                 <div class="input-group">
                                     <span class="input-group-text bg-light border-0">
-                                        <i class="fas fa-search text-muted"></i>
+                                        <i class="bi bi-search"></i>
                                     </span>
                                     <input type="text" class="form-control border-0 bg-light" id="searchInput"
                                         placeholder="Cari nama santri atau judul buku...">
@@ -99,7 +102,7 @@
                 <div class="card">
                     <div class="card-header bg-white border-0 py-3">
                         <h5 class="mb-0">
-                            <i class="fas fa-list me-2 text-primary"></i>
+                            <i class="bi bi-journal"></i>
                             Data Peminjaman Hari Ini
                         </h5>
                     </div>
@@ -156,7 +159,7 @@
                                     @empty
                                         <tr>
                                             <td colspan="6" class="text-center py-5 text-muted">
-                                                <i class="fas fa-inbox fa-2x mb-2"></i><br>
+                                                <i class="bi bi-inbox-fill" style="font-size: 2rem;"></i><br>
                                                 Tidak ada peminjaman hari ini.
                                             </td>
                                         </tr>
@@ -179,7 +182,6 @@
             <div class="col-12">
                 <div class="text-center py-4 border-top">
                     <p class="text-muted mb-0">
-                        <i class="fas fa-mosque me-2"></i>
                         PPM Al-Ikhlash Lampoko | 2025 | Produk Aslam Mardin,S.Kom., M.Kom
                     </p>
                 </div>

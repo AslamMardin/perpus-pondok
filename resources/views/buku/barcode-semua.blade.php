@@ -14,7 +14,17 @@
             .no-print {
                 display: none;
             }
+
+            .barcode-box {
+                border: 1px dashed #000 !important;
+                box-shadow: none !important;
+            }
+
+            .barcode-table td {
+                padding: 10px;
+            }
         }
+
 
         .barcode-table {
             width: 100%;
@@ -31,12 +41,13 @@
             display: flex;
             align-items: flex-start;
             gap: 20px;
-            /* jarak antara barcode dan detail */
             border: 1px solid #ccc;
             padding: 15px;
-            border-radius: 8px;
-            box-shadow: 1px 1px 5px #eee;
+            border-radius: 0;
+            box-shadow: none;
+            /* Hilangkan bayangan */
         }
+
 
         .barcode-box img {
             max-height: 80px;

@@ -73,14 +73,15 @@ class BookController extends Controller
     }
 
 
-public function showBarcode(Book $buku)
+public function showBarcode(Book $buku, Request $request)
 {
-    $qrContent = $buku->id; // atau isi bebas
+    $jumlah = $request->get('jumlah', 1); // default 1 jika tidak diisi
+    $barcodeSvg = QrCode::size(300)->generate($buku->id);
 
-    $barcodeSvg = QrCode::size(300)->generate($qrContent);
-
-    return view('buku.barcode-view', compact('buku', 'barcodeSvg'));
+    return view('buku.barcode-view', compact('buku', 'barcodeSvg', 'jumlah'));
 }
+
+
 public function barcodeSemua()
 {
     $books = \App\Models\Book::orderBy('judul')->get();

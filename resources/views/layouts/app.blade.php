@@ -6,17 +6,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Aplikasi Perpustakaan PPM Al-Ikhlash Lampoko')</title>
 
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Offline Bootstrap -->
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Offline Font Awesome -->
+    <link rel="stylesheet" href="{{ asset('bootstrap-icons/bootstrap-icons.css') }}">
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('fontawesome/css/all.min.css') }}">
+
+
+
+
 
     <!-- Custom CSS -->
     <style>
+        @font-face {
+            font-family: 'Poppins';
+            src: url('fonts/poppins-v23-latin-300.woff2') format('woff2');
+            font-weight: 300;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Poppins';
+            src: url('fonts/poppins-v23-latin-500.woff2') format('woff2');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Poppins';
+            src: url('fonts/poppins-v23-latin-500italic.woff2') format('woff2');
+            font-weight: 500;
+            font-style: italic;
+        }
+
+        @font-face {
+            font-family: 'Poppins';
+            src: url('fonts/poppins-v23-latin-600.woff2') format('woff2');
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Poppins';
+            src: url('fonts/poppins-v23-latin-600italic.woff2') format('woff2');
+            font-weight: 600;
+            font-style: italic;
+        }
+
+        @font-face {
+            font-family: 'Poppins';
+            src: url('fonts/poppins-v23-latin-700.woff2') format('woff2');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Poppins';
+            src: url('fonts/poppins-v23-latin-700italic.woff2') format('woff2');
+            font-weight: 700;
+            font-style: italic;
+        }
+
+        @font-face {
+            font-family: 'Poppins';
+            src: url('fonts/poppins-v23-latin-regular.woff2') format('woff2');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Poppins';
+            src: url('fonts/poppins-v23-latin-italic.woff2') format('woff2');
+            font-weight: 400;
+            font-style: italic;
+        }
+
         :root {
             --primary-green: #4CAF50;
             --light-green: #66BB6A;
@@ -211,7 +277,7 @@
     @yield('content')
 
     <!-- Bootstrap 5 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 
     <!-- Custom JS -->
     <script>

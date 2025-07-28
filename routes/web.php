@@ -12,7 +12,8 @@ use App\Http\Controllers\{
     BookController,
     PenggunaController,
     PeminjamanController,
-    LaporanController
+    LaporanController,
+    RakController
 };
 
 /*
@@ -51,13 +52,24 @@ Route::middleware('auth')->group(function () {
     Route::get('buku/{buku}/barcode', [BookController::class, 'showBarcode'])->name('buku.barcode');
     Route::get('buku/barcode-semua', [BookController::class, 'barcodeSemua'])->name('buku.barcode-semua');
     Route::get('buku/{buku}/barcode', [BookController::class, 'showBarcode'])->name('buku.barcode');
+    Route::get('/buku/template', [BookController::class, 'downloadTemplate'])->name('buku.template');
+Route::post('/buku/import', [BookController::class, 'import'])->name('buku.import');
+Route::get('/buku/page/import', [BookController::class, 'importPage'])->name('buku.importPage');
 
 
+    Route::resource('rak', RakController::class);
+
+    Route::get('/pengguna/cetak-semua', [PenggunaController::class, 'cetakSemua'])
+        ->name('pengguna.cetakSemua');
     Route::resource('pengguna', PenggunaController::class)->parameters(['pengguna' => 'pengguna']);
+    Route::get('/pengguna/{id}/kartu', [PenggunaController::class, 'halamanKartu'])->name('pengguna.kartu');
+
+
+
     Route::resource('peminjaman', PeminjamanController::class)->parameters(['peminjaman' => 'peminjaman']);
 
     // API data buku (misalnya untuk autocomplete form)
-    Route::get('api/buku/{id}', fn($id) => \App\Models\Book::find($id));
+    Route::get('api/buku/{id}', fn($id) => \App\Models\Book::with('rak')->find($id));
 
     // Ubah status peminjaman (dipinjam <-> dikembalikan)
     Route::post('peminjaman/{loan}/toggle-status', [PeminjamanController::class, 'toggleStatus'])->name('peminjaman.toggleStatus');

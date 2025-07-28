@@ -26,8 +26,7 @@
                                     class="mb-2">
                                 <div class="text-label fw-bold text-uppercase small">BUKU PPM AL-IKHLASH LAMPOKO</div>
                                 <div class="small"><strong>Judul:</strong> {{ $buku->judul }}</div>
-                                <div class="small"><strong>Kategori:</strong> {{ $buku->kategori }}</div>
-                                <div class="small"><strong>Rak:</strong> {{ $daftarRak[$buku->rak] ?? $buku->rak }}</div>
+                                <div class="small"><strong>Rak:</strong> {{ $buku->rak->nama ?? '-' }}</div>
                             </div>
                         </div>
                     </div>

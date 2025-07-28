@@ -28,7 +28,7 @@ class PenggunaController extends Controller
 ], [
     'nama.required' => 'Nama wajib diisi.',
     'username.required' => 'Username wajib diisi.',
-    'username.unique' => 'Username sudah digunakan.',
+    'username.unique' => 'santri sudah ada.',
 ]);
 
         User::create([
@@ -79,4 +79,16 @@ class PenggunaController extends Controller
         $pengguna->delete();
         return back()->with('success', 'Pengguna berhasil dihapus.');
     }
+
+    public function halamanKartu($id)
+{
+    $user = User::findOrFail($id);
+    return view('pengguna.kartu-print', compact('user'));
+}
+
+public function cetakSemua()
+{
+    $users = User::all();
+    return view('pengguna.cetak-semua', compact('users'));
+}
 }

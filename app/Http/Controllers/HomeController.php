@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Loan;
 use Carbon\Carbon;
+use App\Models\Book;
+use App\Models\Loan;
+use Illuminate\Http\Request;
+
 class HomeController extends Controller
 {
      public function index()
@@ -17,6 +19,9 @@ class HomeController extends Controller
             ->latest()
             ->get();
 
-        return view('home', compact('loans'));
+              // Ambil semua buku (untuk pencarian di modal)
+    $books = Book::with('rak')->orderBy('judul')->get();
+
+    return view('home', compact('loans', 'books'));
     }
 }

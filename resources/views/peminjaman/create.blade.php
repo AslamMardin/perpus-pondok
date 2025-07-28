@@ -17,7 +17,6 @@
 
                 <div id="detail_buku" class="border rounded p-2 bg-light mt-2 d-none">
                     <small><strong>Judul:</strong> <span id="judul_buku"></span></small><br>
-                    <small><strong>Kategori:</strong> <span id="kategori_buku"></span></small><br>
                     <small><strong>Rak:</strong> <span id="rak_buku"></span></small>
                 </div>
                 <p id="pesan_buku" class="text-danger d-none mt-1">Buku tidak ditemukan.</p>
@@ -221,10 +220,10 @@
                     .then(res => res.json())
                     .then(data => {
                         if (data && data.judul) {
+                            // console.log(data)
                             document.getElementById('detail_buku').classList.remove('d-none');
                             document.getElementById('judul_buku').innerText = data.judul;
-                            document.getElementById('kategori_buku').innerText = data.kategori;
-                            document.getElementById('rak_buku').innerText = data.rak;
+                            document.getElementById('rak_buku').innerText = data.rak.nama;
                             pesan.classList.add('d-none');
                         } else {
                             document.getElementById('detail_buku').classList.add('d-none');

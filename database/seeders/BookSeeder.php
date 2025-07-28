@@ -2,23 +2,25 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
+use App\Models\Rak;
 use App\Models\Book;
+use Illuminate\Database\Seeder;
 
 class BookSeeder extends Seeder
 {
     public function run(): void
     {
+        $rakA1 = Rak::where('nama', 'Sejarah')->first();
+        $rakB2 = Rak::where('nama', 'Agama')->first();
+
         Book::create([
             'judul' => 'Sirah Nabawiyah',
-            'kategori' => 'Sejarah',
-            'rak' => 'A1'
+            'rak_id' => $rakA1->id ?? null
         ]);
 
         Book::create([
             'judul' => 'Fiqh Ibadah',
-            'kategori' => 'Agama',
-            'rak' => 'B2'
+            'rak_id' => $rakB2->id ?? null
         ]);
     }
 }

@@ -72,13 +72,19 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="input-group">
                                     <span class="input-group-text bg-light border-0">
                                         <i class="bi bi-search"></i>
                                     </span>
                                     <input type="text" class="form-control border-0 bg-light" id="searchInput"
                                         placeholder="Cari nama santri atau judul buku...">
+                                    <!-- Tombol Cari Buku -->
+                                    <button class="btn btn-success no-print" data-bs-toggle="modal"
+                                        data-bs-target="#modalCariBuku">
+                                        <i class="bi bi-search"></i> Cari Buku
+                                    </button>
+
                                 </div>
                             </div>
 
@@ -122,37 +128,24 @@
                                 </thead>
                                 <tbody>
                                     @forelse ($loans as $i => $loan)
-                                        @php
-                                            $status = $loan->status;
-
-                                            if (
-                                                $status === 'dipinjam' &&
-                                                $loan->tanggal_tenggat &&
-                                                \Carbon\Carbon::parse($loan->tanggal_tenggat)->isPast()
-                                            ) {
-                                                $status = 'terlambat';
-                                            }
-                                        @endphp
-
                                         <tr>
                                             <td class="text-center">{{ $i + 1 }}</td>
 
                                             <td>
                                                 <div>
                                                     <h6 class="mb-1">{{ $loan->book->judul }}</h6>
-                                                    <small class="text-muted">{{ $loan->book->kategori ?? '-' }}</small>
+
                                                 </div>
                                             </td>
                                             <td>{{ $loan->jumlah_buku }}
                                             </td>
 
                                             <td class="text-center">
-                                                <span
-                                                    class="badge bg-light text-dark">{{ $loan->user->kelas ?? '-' }}</span>
+                                                <span class="badge bg-dark">{{ $loan->user->kelas ?? '-' }}</span>
                                             </td>
                                             <td>
                                                 <h6 class="mb-0">{{ $loan->user->nama }}</h6>
-
+                                                <small class="text-muted">{{ $loan->user->kelas ?? '-' }}</small>
                                             </td>
 
                                         </tr>
@@ -188,6 +181,51 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Cari Buku -->
+    <div class="modal fade" id="modalCariBuku" tabindex="-1" aria-labelledby="modalCariBukuLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCariBukuLabel">Cari Buku</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+
+                    <!-- Input Pencarian -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text bg-light border-0"><i class="bi bi-search"></i></span>
+                        <input type="text" id="searchBuku" class="form-control border-0 bg-light"
+                            placeholder="Cari judul atau rak buku...">
+                    </div>
+
+                    <!-- Tabel Hasil -->
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Judul Buku</th>
+                                    <th>Rak</th>
+                                </tr>
+                            </thead>
+                            <tbody id="hasilCari">
+                                @foreach ($books as $i => $book)
+                                    <tr>
+                                        <td>{{ $i + 1 }}</td>
+                                        <td>{{ $book->judul }}</td>
+                                        <td>{{ $book->rak->nama ?? '-' }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @section('scripts')
@@ -208,23 +246,34 @@
             });
         }
     </script>
+    <script>
+        document.getElementById('searchBuku').addEventListener('keyup', function() {
+            let keyword = this.value.toLowerCase();
+            let rows = document.querySelectorAll('#hasilCari tr');
 
+            rows.forEach(row => {
+                let judul = row.cells[1].innerText.toLowerCase();
+                let rak = row.cells[2].innerText.toLowerCase();
+                row.style.display = (judul.includes(keyword) || rak.includes(keyword)) ? '' : 'none';
+            });
+        });
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('searchInput');
-            const statusFilter = document.getElementById('statusFilter');
-            const table = document.getElementById('loansTable');
-            const rows = table.querySelectorAll('tbody tr');
+            const tableRows = document.querySelectorAll('#loansTable tbody tr');
 
-            // Search functionality
-            searchInput.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase();
-                filterTable();
-            });
+            searchInput.addEventListener('keyup', function() {
+                const keyword = searchInput.value.toLowerCase();
 
-            // Status filter functionality
-            statusFilter.addEventListener('change', function() {
-                filterTable();
+                tableRows.forEach(row => {
+                    const rowText = row.innerText.toLowerCase();
+                    if (rowText.includes(keyword)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
             });
 
 

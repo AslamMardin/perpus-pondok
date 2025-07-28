@@ -1,73 +1,42 @@
 @extends('layouts.admin')
-@section('title', 'Edit Peminjaman')
+@section('title', 'Verifikasi Pengembalian')
 
 @section('content')
     <div class="page-header">
-        <h4 class="mb-0">Edit Data Peminjaman</h4>
+        <h4 class="mb-0">Verifikasi Pengembalian Buku</h4>
     </div>
 
-    <form action="{{ route('peminjaman.update', $peminjaman->id) }}" method="POST">
-        @method('PUT')
-        @csrf
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="mb-3">Detail Peminjaman</h5>
 
-        <div class="mb-3">
-            <label>Santri</label>
-            <select name="user_id" class="form-select" required>
-                <option value="">-- Pilih Santri --</option>
-                @foreach ($users as $user)
-                    <option value="{{ $user->id }}"
-                        {{ old('user_id', $peminjaman->user_id ?? '') == $user->id ? 'selected' : '' }}>
-                        {{ $user->nama }}
-                    </option>
-                @endforeach
-            </select>
+            <ul class="list-group mb-3">
+                <li class="list-group-item"><strong>Santri:</strong> {{ $peminjaman->user->nama }}</li>
+                <li class="list-group-item"><strong>Buku:</strong> {{ $peminjaman->book->judul }}</li>
+                <li class="list-group-item"><strong>Jumlah:</strong> {{ $peminjaman->jumlah_buku }}</li>
+                <li class="list-group-item"><strong>Tanggal Pinjam:</strong>
+                    {{ \Carbon\Carbon::parse($peminjaman->tanggal_pinjam)->translatedFormat('d M Y') }}</li>
+                <li class="list-group-item"><strong>Tanggal Tenggat:</strong>
+                    {{ \Carbon\Carbon::parse($peminjaman->tanggal_tenggat)->translatedFormat('d M Y') }}</li>
+            </ul>
+
+            <form action="{{ route('peminjaman.update', $peminjaman->id) }}" method="POST">
+                @csrf
+                @method('PUT')
+
+                {{-- Hidden untuk ubah status menjadi dikembalikan --}}
+                <input type="hidden" name="status" value="dikembalikan">
+                <input type="hidden" name="tanggal_kembali" value="{{ now()->toDateString() }}">
+
+                <div class="alert alert-info">
+                    Pastikan buku telah diterima sebelum menekan tombol verifikasi.
+                </div>
+
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-check"></i> Konfirmasi Dikembalikan
+                </button>
+                <a href="{{ route('peminjaman.index') }}" class="btn btn-secondary">Batal</a>
+            </form>
         </div>
-
-        <div class="mb-3">
-            <label>Buku</label>
-            <select name="book_id" class="form-select" required>
-                <option value="">-- Pilih Buku --</option>
-                @foreach ($books as $book)
-                    <option value="{{ $book->id }}"
-                        {{ old('book_id', $peminjaman->book_id ?? '') == $book->id ? 'selected' : '' }}>
-                        {{ $book->judul }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label>Jumlah Buku</label>
-            <input type="number" name="jumlah_buku" class="form-control" min="1"
-                value="{{ old('jumlah_buku', $peminjaman->jumlah_buku ?? 1) }}" required>
-        </div>
-
-        <div class="mb-3">
-            <label>Tanggal Pinjam</label>
-            <input type="date" name="tanggal_pinjam" class="form-control"
-                value="{{ old('tanggal_pinjam', $peminjaman->tanggal_pinjam ?? '') }}" required>
-        </div>
-
-        {{-- Field Baru: Tanggal Tenggat (Perpanjangan) --}}
-        <div class="mb-3">
-            <label>Tanggal Tenggat</label>
-            <input type="date" name="tanggal_tenggat" class="form-control"
-                value="{{ old('tanggal_tenggat', $peminjaman->tanggal_tenggat ?? '') }}" required>
-        </div>
-
-
-        <div class="mb-3">
-            <label>Status</label>
-            <select name="status" class="form-select" required>
-                <option value="dipinjam" {{ old('status', $peminjaman->status ?? '') == 'dipinjam' ? 'selected' : '' }}>
-                    Dipinjam</option>
-                <option value="dikembalikan"
-                    {{ old('status', $peminjaman->status ?? '') == 'dikembalikan' ? 'selected' : '' }}>Dikembalikan
-                </option>
-            </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Update</button>
-        <a href="{{ route('peminjaman.index') }}" class="btn btn-secondary">Batal</a>
-    </form>
+    </div>
 @endsection

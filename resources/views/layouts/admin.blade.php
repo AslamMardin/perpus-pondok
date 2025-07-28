@@ -17,7 +17,7 @@
 
     <!-- Custom CSS -->
     <style>
-        @font-face {
+        /* @font-face {
             font-family: 'Poppins';
             src: url('{{ asset('fonts/poppins-v23-latin-300.woff2') }}') format('woff2');
             font-weight: 300;
@@ -50,7 +50,7 @@
             src: url('{{ asset('fonts/poppins-v23-latin-700.woff2') }}') format('woff2');
             font-weight: 700;
             font-style: normal;
-        }
+        } */
 
 
 

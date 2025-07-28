@@ -10,6 +10,9 @@
     <a class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalTambahPengguna">
         <i class="fas fa-plus me-1"></i> Tambah Pengguna
     </a>
+    <a href="{{ route('pengguna.cetakSemua') }}" class="btn btn-warning mb-3 ms-2">
+        <i class="fas fa-id-card"></i> Cetak Semua Kartu
+    </a>
 
     <form action="{{ route('pengguna.index') }}" method="GET" class="mb-3 d-flex">
         <input type="text" name="search" class="form-control me-2" placeholder="Cari nama atau username..."
@@ -25,8 +28,10 @@
                 <tr>
                     <th>#</th>
                     <th>Nama</th>
+                    <th>panggilan</th>
                     <th>Kelas</th>
                     <th>Peran</th>
+                    <th>Cetak Kartu</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -35,8 +40,14 @@
                     <tr>
                         <td>{{ $i + 1 }}</td>
                         <td>{{ $user->nama }}</td>
+                        <td>{{ $user->username }}</td>
                         <td>{{ $user->kelas ?? '-' }}</td>
                         <td>{{ ucfirst($user->peran) }}</td>
+                        <td>
+                            <a href="{{ route('pengguna.kartu', $user->id) }}" class="btn btn-sm btn-info">
+                                <i class="fas fa-id-card"></i> Cetak Kartu
+                            </a>
+                        </td>
                         <td>
                             <a href="{{ route('pengguna.edit', $user->id) }}" class="btn btn-sm btn-warning">
                                 <i class="fas fa-edit"></i>
@@ -78,7 +89,7 @@
                         <input type="text" name="nama" class="form-control" required>
                     </div>
                     <div class="mb-3">
-                        <label>Username</label>
+                        <label>Panggilan</label>
                         <input type="text" name="username" class="form-control" required>
                     </div>
                     <div class="mb-3">
@@ -135,6 +146,7 @@
                                 <option value="12 Mipa 1 MA">12 Mipa 1 MA</option>
                                 <option value="12 Mipa 2 MA">12 Mipa 2 MA</option>
                                 <option value="12 Mipa 3 MA">12 Mipa 3 MA</option>
+                                <option value="12 Mipa 3 MA">12 Mipa 4 MA</option>
                             </optgroup>
                         </select>
                     </div>

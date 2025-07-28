@@ -15,6 +15,12 @@
     <a href="{{ route('buku.barcode-semua') }}" class="btn btn-info mb-3 ms-2">
         <i class="fas fa-qrcode me-1"></i> Barcode Semua Buku
     </a>
+    {{-- <a href="{{ route('buku.template') }}" class="btn btn-success mb-3">
+        <i class="fas fa-download me-1"></i> Download Template
+    </a>
+    <a href="{{ route('buku.importPage') }}" class="btn btn-danger mb-3">
+        <i class="fas fa-download me-1"></i> Import Data
+    </a> --}}
 
 
     @if (request('search'))
@@ -29,22 +35,11 @@
             <i class="fas fa-search me-1"></i> Cari
         </button>
     </form>
+
+
+
     <div class="table-responsive">
         <!-- Tombol Generate Semua Barcode -->
-        @php
-            $daftarRak = [
-                'A1' => 'A1 - Agama',
-                'A2' => 'A2 - Kitab Kuning',
-                'B1' => 'B1 - Bahasa Arab',
-                'B2' => 'B2 - Bahasa Inggris',
-                'F1' => 'F1 - Formal Pelajaran',
-                'N1' => 'N1 - Novel Islami',
-                'R1' => 'R1 - Referensi (Kamus, Ensiklopedia)',
-                'S1' => 'S1 - Sejarah & Biografi',
-                'U1' => 'U1 - Umum',
-                'dll' => 'Lain-Lain',
-            ];
-        @endphp
 
 
         <table class="table table-hover">
@@ -52,7 +47,6 @@
                 <tr>
                     <th>#</th>
                     <th>Judul</th>
-                    <th>Kategori</th>
                     <th>Rak</th>
                     <th>Aksi</th>
                 </tr>
@@ -62,8 +56,7 @@
                     <tr>
                         <td>{{ $i + 1 }}</td>
                         <td>{{ $book->judul }}</td>
-                        <td>{{ $book->kategori }}</td>
-                        <td>{{ $daftarRak[$book->rak] ?? $book->rak }}</td>
+                        <td>{{ $book->rak->nama ?? '-' }}</td>
                         <td>
                             <a href="{{ route('buku.edit', $book->id) }}" class="btn btn-sm btn-warning">
                                 <i class="fas fa-edit"></i>
@@ -142,35 +135,16 @@
                             <label>Judul Buku</label>
                             <input type="text" name="judul" class="form-control" required>
                         </div>
-                        <div class="mb-3">
-                            <label for="kategori" class="form-label">Kategori Buku</label>
-                            <select name="kategori" id="kategori" class="form-select" required>
-                                <option value="">-- Pilih Kategori --</option>
-                                <option value="Formal">Formal (Pelajaran Sekolah)</option>
-                                <option value="Novel">Novel</option>
-                                <option value="Sejarah">Sejarah</option>
-                                <option value="Agama">Agama (Kitab, Fikih, Tauhid)</option>
-                                <option value="Bahasa">Bahasa (Arab, Inggris, Indonesia)</option>
-                                <option value="Motivasi">Motivasi & Pengembangan Diri</option>
-                                <option value="Biografi">Biografi Tokoh Islam</option>
-                                <option value="Referensi">Referensi (Kamus, Ensiklopedia)</option>
 
-                            </select>
-                        </div>
 
                         <div class="mb-3">
                             <label for="rak" class="form-label">Rak Buku</label>
-                            <select name="rak" id="rak" class="form-select" required>
+                            <select name="rak_id" id="rak" class="form-select" required>
                                 <option value="">-- Pilih Rak --</option>
-                                <option value="A1">A1 - Agama Dasar</option>
-                                <option value="A2">A2 - Kitab Kuning</option>
-                                <option value="B1">B1 - Bahasa Arab</option>
-                                <option value="B2">B2 - Bahasa Inggris</option>
-                                <option value="F1">F1 - Formal Pelajaran</option>
-                                <option value="N1">N1 - Novel Islami</option>
-                                <option value="R1">R1 - Referensi (Kamus, Ensiklopedia)</option>
-                                <option value="S1">S1 - Sejarah & Biografi</option>
-                                <option value="dll">Lain-Lain</option>
+                                @foreach ($raks as $rak)
+                                    <option value="{{ $rak->id }}">{{ $rak->nama }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
 

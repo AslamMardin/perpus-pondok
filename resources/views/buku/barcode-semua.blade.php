@@ -29,8 +29,7 @@
                                     class="mb-2">
                                 <div class="text-label fw-bold text-uppercase small">BUKU PPM AL-IKHLASH LAMPOKO</div>
                                 <strong>Judul:</strong> {{ $book->judul }}<br>
-                                <strong>Kategori:</strong> {{ $book->kategori }}<br>
-                                <strong>Rak:</strong> {{ $daftarRak[$book->rak] ?? $book->rak }}<br>
+                                <strong>Rak:</strong> {{ $book->rak->nama ?? '-' }}<br>
                             </div>
                         </div>
                     </td>
@@ -49,7 +48,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            font-size: 13px;
+            /* font-size: 13px; */
             /* margin: 20px; */
         }
 

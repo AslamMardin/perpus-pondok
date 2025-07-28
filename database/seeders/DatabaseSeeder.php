@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         SantriKelasSeeder::class, 
         BookSeeder::class,
         LoanSeeder::class,
+        RakSeeder::class
     ]);
 }
 }

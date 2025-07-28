@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-       Schema::create('books', function (Blueprint $table) {
-            $table->id();
-            $table->string('judul');
-            $table->timestamps();
+        Schema::table('books', function (Blueprint $table) {
+               $table->foreignId('rak_id')->nullable()->after('judul')->constrained('raks')->onDelete('set null');
         });
     }
 
@@ -23,6 +21,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('books');
+        Schema::table('books', function (Blueprint $table) {
+            $table->dropForeign(['rak_id']);
+            $table->dropColumn('rak_id');
+        });
     }
 };

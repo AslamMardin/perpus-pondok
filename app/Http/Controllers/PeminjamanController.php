@@ -101,44 +101,33 @@ Loan::create([
         return view('peminjaman.edit', compact('peminjaman', 'users', 'books'));
     }
 
-   public function update(Request $request, Loan $peminjaman)
+  public function update(Request $request, Loan $peminjaman)
 {
-
-
-
-$request->validate([
-    'user_id' => 'required|exists:users,id',
-    'book_id' => 'required|exists:books,id',
-    'jumlah_buku' => 'required|integer|min:1',
-        'tanggal_pinjam' => 'required|date',
-        'tanggal_tenggat' => 'required|date|after_or_equal:tanggal_pinjam',
-        'tanggal_kembali' => 'nullable|date',
+    // Validasi hanya untuk status & tanggal
+    $request->validate([
         'status' => 'required|in:dipinjam,dikembalikan',
     ]);
 
-    
-
-    $peminjaman->user_id = $request->user_id;
-    $peminjaman->book_id = $request->book_id;
-    $peminjaman->jumlah_buku = $request->jumlah_buku;
-    $peminjaman->tanggal_pinjam = $request->tanggal_pinjam;
-    $peminjaman->tanggal_tenggat = $request->tanggal_tenggat;
+    // Update status
     $peminjaman->status = $request->status;
 
-    // Tangani tanggal_kembali
-    if ($request->status === 'dikembalikan' && is_null($peminjaman->tanggal_kembali)) {
+    // Jika dikembalikan, set tanggal_kembali otomatis
+    if ($request->status === 'dikembalikan') {
         $peminjaman->tanggal_kembali = now();
     }
 
-    // Jika status kembali ke 'dipinjam', kosongkan tanggal_kembali
+    // Jika kembali ke dipinjam, kosongkan tanggal_kembali
     if ($request->status === 'dipinjam') {
         $peminjaman->tanggal_kembali = null;
     }
 
     $peminjaman->save();
 
-    return redirect()->route('peminjaman.index')->with('success', 'Data peminjaman diperbarui.');
+    return redirect()
+        ->route('peminjaman.index')
+        ->with('success', 'Status peminjaman berhasil diperbarui.');
 }
+
 
 
     public function destroy(Loan $peminjaman)

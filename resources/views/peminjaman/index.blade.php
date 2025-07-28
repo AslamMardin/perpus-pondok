@@ -59,7 +59,6 @@
                                 <th>Batas Watu</th>
                                 <th>Tanggal Kembali</th>
                                 <th>Status Telat</th>
-                                <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -86,32 +85,7 @@
                                             <span class="text-muted">-</span>
                                         @endif
                                     </td>
-                                    <td>
-                                        @php
-                                            $isTerlambat = false;
 
-                                            $tenggat = \Carbon\Carbon::parse($loan->tanggal_tenggat)->toDateString(); // hanya tanggal
-                                            $tanggalKembali = $loan->tanggal_kembali
-                                                ? \Carbon\Carbon::parse($loan->tanggal_kembali)->toDateString()
-                                                : null;
-                                            $hariIni = now()->toDateString();
-
-                                            if ($loan->status === 'dipinjam' && $hariIni > $tenggat) {
-                                                $isTerlambat = true;
-                                            } elseif ($loan->status === 'dikembalikan' && $tanggalKembali > $tenggat) {
-                                                $isTerlambat = true;
-                                            }
-                                        @endphp
-
-                                        @if ($isTerlambat)
-                                            <span class="badge bg-danger">Terlambat</span>
-                                        @elseif ($loan->status === 'dipinjam')
-                                            <span class="badge bg-warning text-dark">Belum Kembali</span>
-                                        @else
-                                            <span class="badge bg-success">Tepat Waktu</span>
-                                        @endif
-
-                                    </td>
 
 
 
@@ -121,25 +95,38 @@
                                             {{ ucfirst($loan->status) }}
                                         </span>
                                     </td>
-                                    <td>
-                                        {{-- Tombol Edit --}}
-                                        <a href="{{ route('peminjaman.edit', $loan->id) }}" class="btn btn-sm btn-warning"
-                                            title="Edit">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-
-
-                                        {{-- Tombol Hapus --}}
-                                        <form action="{{ route('peminjaman.destroy', $loan->id) }}" method="POST"
-                                            class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-sm btn-danger"
-                                                onclick="return confirm('Yakin ingin menghapus?')" title="Hapus">
-                                                <i class="fas fa-trash"></i>
+                                    <td class="text-center">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="fas fa-cog"></i> Aksi
                                             </button>
-                                        </form>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                {{-- Verifikasi / Edit --}}
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                        href="{{ route('peminjaman.edit', $loan->id) }}">
+                                                        <i class="fas fa-check-circle text-success me-2"></i> Verifikasi /
+                                                        Edit
+                                                    </a>
+                                                </li>
+
+                                                {{-- Hapus --}}
+                                                <li>
+                                                    <form action="{{ route('peminjaman.destroy', $loan->id) }}"
+                                                        method="POST"
+                                                        onsubmit="return confirm('Yakin ingin menghapus peminjaman ini?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button class="dropdown-item text-danger">
+                                                            <i class="fas fa-trash-alt me-2"></i> Hapus
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </td>
+
 
                                 </tr>
                             @empty

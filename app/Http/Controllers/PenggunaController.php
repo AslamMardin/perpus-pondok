@@ -24,26 +24,19 @@ class PenggunaController extends Controller
         $request->validate([
     'nama' => 'required|string|max:255',
     'username' => 'required|string|unique:users',
-    'password' => 'required|string|min:6|confirmed',
     'kelas' => 'nullable|string',
-    'peran' => 'required|in:admin,santri'
 ], [
     'nama.required' => 'Nama wajib diisi.',
     'username.required' => 'Username wajib diisi.',
     'username.unique' => 'Username sudah digunakan.',
-    'password.required' => 'Password wajib diisi.',
-    'password.min' => 'Password minimal terdiri dari 6 karakter.',
-    'password.confirmed' => 'Konfirmasi password tidak cocok.',
-    'peran.required' => 'Peran harus dipilih.',
-    'peran.in' => 'Peran yang dipilih tidak valid.',
 ]);
 
         User::create([
             'nama' => $request->nama,
             'username' => $request->username,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make('santri123'),
             'kelas' => $request->kelas,
-            'peran' => $request->peran
+            'peran' => 'santri'
         ]);
 
         return back()->with('success', 'Pengguna berhasil ditambahkan.');

@@ -33,7 +33,7 @@
         <!-- Tombol Generate Semua Barcode -->
         @php
             $daftarRak = [
-                'A1' => 'A1 - Agama Dasar',
+                'A1' => 'A1 - Agama',
                 'A2' => 'A2 - Kitab Kuning',
                 'B1' => 'B1 - Bahasa Arab',
                 'B2' => 'B2 - Bahasa Inggris',
@@ -41,6 +41,7 @@
                 'N1' => 'N1 - Novel Islami',
                 'R1' => 'R1 - Referensi (Kamus, Ensiklopedia)',
                 'S1' => 'S1 - Sejarah & Biografi',
+                'U1' => 'U1 - Umum',
                 'dll' => 'Lain-Lain',
             ];
         @endphp

@@ -83,24 +83,63 @@
                     </div>
                     <div class="mb-3">
                         <label>Kelas (Opsional)</label>
-                        <input type="text" name="kelas" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label>Peran</label>
-                        <select name="peran" class="form-select" required>
-                            <option value="">-- Pilih Peran --</option>
-                            <option value="admin">Admin</option>
-                            <option value="santri">Santri</option>
+                        <select name="kelas" id="kelas" class="form-control">
+                            <option value="">-- Pilih Kelas --</option>
+
+                            <!-- SMP -->
+                            <optgroup label="SMP">
+                                <option value="7 A SMP">7 A SMP</option>
+                                <option value="7 B SMP">7 B SMP</option>
+                                <option value="7 C SMP">7 C SMP</option>
+                                <option value="7 D SMP">7 D SMP</option>
+
+                                <option value="8 A SMP">8 A SMP</option>
+                                <option value="8 B SMP">8 B SMP</option>
+                                <option value="8 C SMP">8 C SMP</option>
+                                <option value="8 D SMP">8 D SMP</option>
+
+                                <option value="9 A SMP">9 A SMP</option>
+                                <option value="9 B SMP">9 B SMP</option>
+                                <option value="9 C SMP">9 C SMP</option>
+                            </optgroup>
+
+                            <!-- MTs -->
+                            <optgroup label="MTs">
+                                <option value="7 A MTs">7 A MTs</option>
+                                <option value="7 B MTs">7 B MTs</option>
+                                <option value="7 C MTs">7 C MTs</option>
+                                <option value="7 D MTs">7 D MTs</option>
+
+                                <option value="8 A MTs">8 A MTs</option>
+                                <option value="8 B MTs">8 B MTs</option>
+                                <option value="8 C MTs">8 C MTs</option>
+                                <option value="8 D MTs">8 D MTs</option>
+
+                                <option value="9 A MTs">9 A MTs</option>
+                                <option value="9 B MTs">9 B MTs</option>
+                                <option value="9 C MTs">9 C MTs</option>
+                            </optgroup>
+
+                            <!-- MA -->
+                            <optgroup label="MA">
+                                <option value="10 Merdeka 1 MA">10 Merdeka 1 MA</option>
+                                <option value="10 Merdeka 2 MA">10 Merdeka 2 MA</option>
+                                <option value="10 Merdeka 3 MA">10 Merdeka 3 MA</option>
+                                <option value="10 Merdeka 4 MA">10 Merdeka 4 MA</option>
+
+                                <option value="11 Merdeka 1 MA">11 Merdeka 1 MA</option>
+                                <option value="11 Merdeka 2 MA">11 Merdeka 2 MA</option>
+                                <option value="11 Merdeka 3 MA">11 Merdeka 3 MA</option>
+                                <option value="11 Merdeka 4 MA">11 Merdeka 4 MA</option>
+
+                                <option value="12 Mipa 1 MA">12 Mipa 1 MA</option>
+                                <option value="12 Mipa 2 MA">12 Mipa 2 MA</option>
+                                <option value="12 Mipa 3 MA">12 Mipa 3 MA</option>
+                            </optgroup>
                         </select>
                     </div>
-                    <div class="mb-3">
-                        <label>Password</label>
-                        <input type="password" name="password" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label>Konfirmasi Password</label>
-                        <input type="password" name="password_confirmation" class="form-control" required>
-                    </div>
+
+
                 </div>
 
                 <div class="modal-footer">

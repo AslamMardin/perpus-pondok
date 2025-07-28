@@ -9,7 +9,7 @@
     </a>
     <a class="nav-link {{ request()->routeIs('pengguna.*') ? 'active' : '' }}" href="{{ route('pengguna.index') }}">
         <i class="fas fa-users"></i>
-        Pengguna
+        Santri
     </a>
     <a class="nav-link {{ request()->routeIs('peminjaman.*') ? 'active' : '' }}" href="{{ route('peminjaman.index') }}">
         <i class="fas fa-hand-holding"></i>

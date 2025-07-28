@@ -5,7 +5,7 @@
 @section('content')
     <div class="page-header">
         <h4 class="mb-0">Riwayat Pengembalian Buku</h4>
-        <p class="text-muted">Data pengembalian buku oleh santri</p>
+        <p class="text-white-50">Data pengembalian buku oleh santri</p>
     </div>
 
     {{-- Filter berdasarkan kelas --}}

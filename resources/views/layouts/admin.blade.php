@@ -285,12 +285,12 @@
                     <!-- Header -->
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <div>
-                            <h2 class="mb-0">Dashboard</h2>
+                            <h2 class="mb-0">Aplikasi Perpustakaan</h2>
                             <p class="text-muted mb-0">Selamat datang, {{ Auth::user()->nama }}</p>
                         </div>
                         <div class="text-end">
                             <p class="mb-0 text-muted">{{ date('l, d F Y') }}</p>
-                            <p class="mb-0 text-muted">{{ date('H:i') }} WIB</p>
+                            <p class="mb-0 text-muted">{{ date('H:i') }} WITA</p>
                         </div>
                     </div>
                     @if (session('success'))

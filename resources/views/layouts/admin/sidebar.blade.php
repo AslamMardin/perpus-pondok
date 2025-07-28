@@ -1,4 +1,4 @@
-<nav class="nav flex-column">
+<nav class="nav flex-column ">
     <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
         <i class="fas fa-tachometer-alt"></i>
         Dashboard
@@ -9,7 +9,11 @@
     </a>
     <a class="nav-link {{ request()->routeIs('pengguna.*') ? 'active' : '' }}" href="{{ route('pengguna.index') }}">
         <i class="fas fa-users"></i>
+<<<<<<< HEAD
         Santri
+=======
+        Akun
+>>>>>>> c3aeb8bfe31c8464272a5f022b100594f24088b6
     </a>
     <a class="nav-link {{ request()->routeIs('peminjaman.*') ? 'active' : '' }}" href="{{ route('peminjaman.index') }}">
         <i class="fas fa-hand-holding"></i>

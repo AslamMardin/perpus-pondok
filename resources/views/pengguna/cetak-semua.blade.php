@@ -11,29 +11,31 @@
 
     <div class="card-grid">
         @foreach ($users as $user)
-            <div class="card-item">
-                <div class="card-container shadow position-relative">
+            <div class="card-wrapper d-flex justify-content-center">
+                <div class="card-item p-2">
+                    <div class="card-container shadow position-relative">
 
-                    <!-- Logo Background Transparan -->
-                    <img src="{{ asset('img/logo.png') }}" alt="Logo Background" class="logo-bg">
+                        <!-- Logo Background Transparan -->
+                        <img src="{{ asset('img/logo.png') }}" alt="Logo Background" class="logo-bg">
 
-                    <!-- Logo Pondok di Sudut Kanan Atas -->
-                    <img src="{{ asset('img/logo.png') }}" alt="Logo Pondok" class="logo-pondok">
+                        <!-- Logo Pondok di Sudut Kanan Atas -->
+                        <img src="{{ asset('img/logo.png') }}" alt="Logo Pondok" class="logo-pondok">
 
-                    <!-- Konten Kartu -->
-                    <div class="card-content d-flex align-items-center">
-                        <!-- Foto User -->
-                        <div class="photo me-2">
-                            <img src="{{ asset('img/img-default.jpg') }}" alt="Foto" class="foto-user">
-                        </div>
+                        <!-- Konten Kartu -->
+                        <div class="card-content d-flex align-items-center">
+                            <!-- Foto User -->
+                            <div class="photo me-3">
+                                <img src="{{ asset('img/img-default.jpg') }}" alt="Foto" class="foto-user">
+                            </div>
 
-                        <!-- Informasi -->
-                        <div class="info text-start">
-                            <div class="label-header">KARTU PERPUSTAKAAN</div>
-                            <div class="info-item"><span class="label">Nama</span>: {{ $user->nama }}</div>
-                            <div class="info-item"><span class="label">Kelas</span>: {{ $user->kelas ?? '-' }}</div>
-                            <div class="info-item"><span class="label">Peran</span>: {{ ucfirst($user->peran) }}</div>
-                            <div class="info-item"><span class="label">ID</span>: {{ $user->id }}</div>
+                            <!-- Informasi -->
+                            <div class="info text-start">
+                                <div class="label-header">KARTU PERPUSTAKAAN</div>
+                                <div class="info-item"><span class="label">Nama</span>: {{ $user->nama }}</div>
+                                <div class="info-item"><span class="label">Kelas</span>: {{ $user->kelas ?? '-' }}</div>
+                                <div class="info-item"><span class="label">Peran</span>: {{ ucfirst($user->peran) }}</div>
+                                <div class="info-item"><span class="label">ID</span>: {{ $user->id }}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -44,16 +46,23 @@
 
 @push('styles')
     <style>
-        /* Grid Kartu */
         .card-grid {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
             justify-content: flex-start;
         }
 
+        /* Wrapper */
+        .card-wrapper {
+            flex: 0 0 calc(50% - 8px);
+            display: flex;
+            justify-content: center;
+            page-break-inside: avoid;
+        }
+
         .card-item {
-            width: 32%;
+            width: 340px;
             box-sizing: border-box;
         }
 
@@ -62,7 +71,7 @@
             background: linear-gradient(135deg, #00796b, #004d40);
             color: #fff;
             border-radius: 10px;
-            padding: 10px;
+            padding: 15px;
             position: relative;
             overflow: hidden;
             font-family: 'Arial', sans-serif;
@@ -75,7 +84,7 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 180px;
+            width: 220px;
             opacity: 0.07;
             transform: translate(-50%, -50%);
             z-index: 0;
@@ -84,10 +93,10 @@
         /* Logo pojok kanan atas */
         .logo-pondok {
             position: absolute;
-            top: 8px;
-            right: 8px;
-            width: 30px;
-            height: 30px;
+            top: 10px;
+            right: 10px;
+            width: 35px;
+            height: 35px;
             object-fit: contain;
             z-index: 1;
         }
@@ -100,8 +109,8 @@
 
         /* Foto user */
         .foto-user {
-            width: 55px;
-            height: 55px;
+            width: 65px;
+            height: 65px;
             object-fit: cover;
             border-radius: 50%;
             border: 2px solid #fff;
@@ -109,10 +118,10 @@
 
         /* Label header */
         .label-header {
-            font-size: 11px;
+            font-size: 12px;
             font-weight: bold;
             text-transform: uppercase;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             letter-spacing: 1px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.3);
             padding-bottom: 2px;
@@ -120,8 +129,8 @@
 
         /* Informasi detail */
         .info-item {
-            font-size: 10px;
-            margin-bottom: 2px;
+            font-size: 11px;
+            margin-bottom: 3px;
         }
 
         .label {
@@ -134,19 +143,6 @@
                 visibility: hidden;
             }
 
-            .label-header {
-                font-size: 8px;
-
-            }
-
-            /* Informasi detail */
-            .info-item {
-                font-size: 8px;
-                margin-bottom: 1px;
-            }
-
-
-
             .card-grid,
             .card-grid * {
                 visibility: visible;
@@ -154,8 +150,8 @@
 
             .card-grid {
                 position: absolute;
-                top: 10px;
-                left: 10px;
+                top: 0;
+                left: 0;
                 width: 100%;
             }
 

@@ -108,5 +108,10 @@ Route::get('/buku/page/import', [BookController::class, 'importPage'])->name('bu
         // Per Santri
         Route::get('santri', [LaporanController::class, 'santri'])->name('santri');
         Route::post('santri', [LaporanController::class, 'filterSantri'])->name('santri.filter');
+        Route::get('santri/pdf/{id}', [LaporanController::class, 'exportSantriPdf'])->name('santri.pdf');
+
+        // routes/web.php
+Route::get('grafik', [LaporanController::class, 'grafikView'])->name('grafik');
+
     });
 });

@@ -48,7 +48,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="table-responsive">
-                    <table class="table table-hover table-bordered align-middle">
+                    <table class="table table-hover table-bordered align-middle" style="min-height: 200px">
                         <thead class="table-light">
                             <tr>
                                 <th>#</th>

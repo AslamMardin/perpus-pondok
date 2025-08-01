@@ -22,9 +22,16 @@
         href="{{ route('riwayat.pengembalian') }}">
         <i class="fas fa-undo-alt"></i> Pengembalian
     </a>
-    <!-- Menu Laporan -->
-    <a class="nav-link {{ request()->routeIs('laporan.*') ? 'active' : '' }}" data-bs-toggle="collapse"
-        href="#submenuLaporan" role="button" aria-expanded="{{ request()->routeIs('laporan.*') ? 'true' : 'false' }}"
+    <a class="nav-link {{ request()->routeIs('laporan.grafik') ? 'active' : '' }}"
+        href="{{ route('laporan.grafik') }}">
+        <i class="fas fa-chart-line me-2"></i>
+        Grafik
+    </a>
+
+
+    <a class="nav-link {{ request()->routeIs('laporan.*') && !request()->routeIs('laporan.grafik') ? 'active' : '' }}"
+        data-bs-toggle="collapse" href="#submenuLaporan" role="button"
+        aria-expanded="{{ request()->routeIs('laporan.*') && !request()->routeIs('laporan.grafik') ? 'true' : 'false' }}"
         aria-controls="submenuLaporan" title="Lihat laporan peminjaman buku">
         <i class="fas fa-chart-bar me-2"></i>
         Laporan
@@ -35,27 +42,29 @@
         <nav class="nav flex-column ms-4">
             <a class="nav-link {{ request()->routeIs('laporan.tanggal') ? 'active' : '' }}"
                 href="{{ route('laporan.tanggal') }}">
-                Berdasarkan Tanggal/Bulan/Tahun
+                Berdasarkan Tanggal
             </a>
             <a class="nav-link {{ request()->routeIs('laporan.santri') ? 'active' : '' }}"
                 href="{{ route('laporan.santri') }}">
-                Per Santri / Per Buku
+                Per Santri
             </a>
-            <a class="nav-link {{ request()->routeIs('laporan.peminjaman') ? 'active' : '' }}"
+            {{-- <a class="nav-link {{ request()->routeIs('laporan.peminjaman') ? 'active' : '' }}"
                 href="{{ route('laporan.peminjaman') }}">
                 Peminjaman
             </a>
             <a class="nav-link {{ request()->routeIs('laporan.pengembalian') ? 'active' : '' }}"
                 href="{{ route('laporan.pengembalian') }}">
                 Pengembalian
-            </a>
+            </a> --}}
             <a class="nav-link {{ request()->routeIs('laporan.terlambat') ? 'active' : '' }}"
                 href="{{ route('laporan.terlambat') }}">
                 Terlambat
             </a>
 
+
         </nav>
     </div>
+
 
 
 </nav>

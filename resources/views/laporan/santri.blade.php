@@ -42,6 +42,15 @@
     {{-- Tabel Data --}}
     @if (!empty($loans))
         <div class="card shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span class="fw-bold">Hasil Laporan Peminjaman</span>
+
+                {{-- Tombol Export PDF --}}
+                <a href="{{ route('laporan.santri.pdf', ['id' => request('user_id') ?? $userId]) }}"
+                    class="btn btn-sm btn-danger" target="_blank">
+                    <i class="fas fa-file-pdf me-1"></i> Export PDF
+                </a>
+            </div>
             <div class="card-body table-responsive">
                 <table class="table table-bordered table-hover align-middle">
                     <thead class="table-light">
@@ -81,6 +90,8 @@
                                         {{ ucfirst($loan->status) }}
                                     </span>
                                 </td>
+
+
                             </tr>
                         @empty
                             <tr>

@@ -7,6 +7,7 @@ use App\Models\Loan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\LaporanTanggalExport;
 
@@ -161,5 +162,58 @@ public function filterSantri(Request $request)
 
     return view('laporan.santri', compact('loans', 'santriList'));
 }
+
+public function exportSantriPdf($id)
+{
+    $santri = User::findOrFail($id);
+    $loans = Loan::with('book')
+                ->where('user_id', $id)
+                ->orderBy('tanggal_pinjam', 'asc')
+                ->get();
+
+    $pdf = PDF::loadView('laporan.santri_pdf', compact('santri', 'loans'))
+              ->setPaper('A4', 'portrait');
+
+    return $pdf->download('Laporan_Santri_'.$santri->nama.'.pdf');
+}
+
+public function grafikView(Request $request)
+    {
+         $tahunSekarang = date('Y');
+    $tahun = $request->tahun ?? $tahunSekarang;
+
+    // Range tahun: tahun ini -2 sampai +2
+    $daftarTahun = collect(range($tahunSekarang - 2, $tahunSekarang + 2));
+
+    $data = \App\Models\Loan::selectRaw('MONTH(tanggal_pinjam) as bulan, COUNT(*) as total')
+                ->whereYear('tanggal_pinjam', $tahun)
+                ->groupBy('bulan')
+                ->orderBy('bulan')
+                ->pluck('total', 'bulan')
+                ->toArray();
+
+    $bulanIndo = [
+        1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
+        5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus',
+        9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
+    ];
+
+    $bulanIslami = [
+        'Muharram', 'Safar', 'Rabiul Awal', 'Rabiul Akhir',
+        'Jumadil Awal', 'Jumadil Akhir', 'Rajab', 'Syaban',
+        'Ramadhan', 'Syawal', 'Zulqaidah', 'Zulhijjah'
+    ];
+
+    $labels = [];
+    $totals = [];
+    for ($i = 1; $i <= 12; $i++) {
+        $labels[] = [$bulanIndo[$i], '(' . $bulanIslami[$i - 1] . ')'];
+        $totals[] = $data[$i] ?? 0;
+    }
+
+    return view('laporan.peminjaman_bulanan', compact('labels', 'totals', 'tahun', 'daftarTahun'));
+    }
+
+
 
 }

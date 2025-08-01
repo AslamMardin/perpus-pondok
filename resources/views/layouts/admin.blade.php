@@ -294,10 +294,26 @@
                         </div>
                     </div>
                     @if (session('success'))
-                        <div class="alert alert-success fade-in">
-                            {{ session('success') }}
-                        </div>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                Swal.fire({
+                                    toast: true,
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: "{{ session('success') }}",
+                                    showConfirmButton: false,
+                                    timer: 2500,
+                                    timerProgressBar: true,
+                                    background: '#4CAF50',
+                                    color: 'white',
+                                    customClass: {
+                                        popup: 'shadow-lg rounded-3'
+                                    }
+                                });
+                            });
+                        </script>
                     @endif
+
 
                     @if ($errors->any())
                         <div class="alert alert-danger fade-in">

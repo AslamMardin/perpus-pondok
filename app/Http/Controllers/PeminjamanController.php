@@ -65,13 +65,31 @@ class PeminjamanController extends Controller
    public function store(Request $request)
 {
     $request->validate([
-        'user_id' => 'required|exists:users,id',
-        'book_id' => 'required|exists:books,id',
-        'jumlah_buku' => 'required|integer|min:1',
-        'tanggal_pinjam' => 'required|date',
-        'tanggal_kembali' => 'nullable|date',
-        'status' => 'required|in:dipinjam,dikembalikan',
-    ]);
+    'user_id' => 'required|exists:users,id',
+    'book_id' => 'required|exists:books,id',
+    'jumlah_buku' => 'required|integer|min:1',
+    'tanggal_pinjam' => 'required|date',
+    'tanggal_kembali' => 'nullable|date',
+    'status' => 'required|in:dipinjam,dikembalikan',
+], [
+    'user_id.required' => 'Santri harus dipilih.',
+    'user_id.exists' => 'Santri yang dipilih tidak valid.',
+    
+    'book_id.required' => 'Buku harus dipilih.',
+    'book_id.exists' => 'Buku yang dipilih tidak valid.',
+    
+    'jumlah_buku.required' => 'Jumlah buku harus diisi.',
+    'jumlah_buku.integer' => 'Jumlah buku harus berupa angka.',
+    'jumlah_buku.min' => 'Jumlah buku minimal 1.',
+    
+    'tanggal_pinjam.required' => 'Tanggal pinjam harus diisi.',
+    'tanggal_pinjam.date' => 'Tanggal pinjam harus berupa tanggal yang valid.',
+    
+    'tanggal_kembali.date' => 'Tanggal kembali harus berupa tanggal yang valid.',
+    
+    'status.required' => 'Status peminjaman harus diisi.',
+    'status.in' => 'Status peminjaman tidak valid.',
+]);
 
    
 

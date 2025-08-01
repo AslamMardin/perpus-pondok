@@ -11,15 +11,39 @@
         {{-- Row Buku & Santri --}}
         <div class="row">
             <div class="col-md-6 mb-3">
-                <label>ID Buku (Scan/Manual)</label>
-                <input type="text" name="book_id" id="book_id" class="form-control" oninput="cariBuku()" required>
-                <small class="text-muted">Tekan <kbd>Ctrl</kbd> atau <kbd>Ctrl + B</kbd> untuk fokus ke sini</small>
+                <label class="fw-semibold">ID Buku (Scan/Manual)</label>
+                <input type="text" name="book_id" id="book_id" class="form-control shadow-sm" oninput="cariBuku()"
+                    required>
+                <small class="text-muted d-block mt-1">
+                    Tekan <kbd>Ctrl</kbd> atau <kbd>Ctrl + B</kbd> untuk fokus ke sini
+                </small>
 
-                <div id="detail_buku" class="border rounded p-2 bg-light mt-2 d-none">
-                    <small><strong>Judul:</strong> <span id="judul_buku"></span></small><br>
-                    <small><strong>Rak:</strong> <span id="rak_buku"></span></small>
+                <!-- Detail Buku -->
+                <div id="detail_buku" class="mt-3 d-none">
+                    <div class="card border-0 shadow-sm rounded-3"
+                        style="background: linear-gradient(135deg, #f0fff4, #ffffff);">
+                        <div class="card-body py-2">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1 text-success">
+                                        <i class="fas fa-book me-2"></i> <span id="judul_buku"></span>
+                                    </h6>
+                                    <small class="text-muted">
+                                        <i class="fas fa-map-marker-alt me-1"></i> Rak: <span id="rak_buku"></span>
+                                    </small>
+                                </div>
+                                <div>
+                                    <span id="status_buku" class="badge bg-success">Tersedia</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <p id="pesan_buku" class="text-danger d-none mt-1">Buku tidak ditemukan.</p>
+
+                <!-- Pesan Buku Tidak Ditemukan -->
+                <p id="pesan_buku" class="text-danger fw-semibold d-none mt-2">
+                    <i class="fas fa-exclamation-circle me-1"></i> Buku tidak ditemukan.
+                </p>
             </div>
 
             <div class="col-md-6 mb-3">
@@ -129,6 +153,23 @@
 @endsection
 @push('styles')
     <style>
+        /* Animasi Fade In */
+        @keyframes fadeInDetail {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #detail_buku.animate__fadeIn {
+            animation: fadeInDetail 0.3s ease-in-out;
+        }
+
         .btn-santri {
             border: 1px solid #4CAF50;
             color: #4CAF50;
@@ -149,6 +190,52 @@
 @endpush
 
 @push('scripts')
+    <script>
+        function updateStatusBadge(status) {
+            const badge = document.getElementById('status_buku');
+            if (status === 'tersedia') {
+                badge.className = 'badge bg-success';
+                badge.textContent = 'Tersedia';
+            } else if (status === 'dipinjam') {
+                badge.className = 'badge bg-danger';
+                badge.textContent = 'Dipinjam';
+            } else {
+                badge.className = 'badge bg-secondary';
+                badge.textContent = 'Tidak Diketahui';
+            }
+        }
+
+        function cariBuku() {
+            const id = document.getElementById('book_id').value;
+            const detail = document.getElementById('detail_buku');
+            const pesan = document.getElementById('pesan_buku');
+
+            if (id.length > 0) {
+                fetch(`/api/buku/${id}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data && data.judul) {
+                            document.getElementById('judul_buku').innerText = data.judul;
+                            document.getElementById('rak_buku').innerText = data.rak.nama;
+                            updateStatusBadge(data.status || 'tersedia');
+
+                            detail.classList.remove('d-none');
+                            pesan.classList.add('d-none');
+                        } else {
+                            detail.classList.add('d-none');
+                            pesan.classList.remove('d-none');
+                        }
+                    })
+                    .catch(() => {
+                        detail.classList.add('d-none');
+                        pesan.classList.remove('d-none');
+                    });
+            } else {
+                detail.classList.add('d-none');
+                pesan.classList.add('d-none');
+            }
+        }
+    </script>
     <script>
         // Inisialisasi flatpickr untuk tanggal pinjam dan tanggal kembali
         flatpickr("#tanggal_pinjam", {
@@ -198,6 +285,21 @@
             document.getElementById('user_nama').value = nama;
             var modal = bootstrap.Modal.getInstance(document.getElementById('modalCariSantri'));
             modal.hide();
+            // Notifikasi toast kanan atas
+            Swal.fire({
+                toast: true,
+                position: 'top-end', // kanan atas
+                icon: 'success',
+                title: `Santri dipilih: ${nama}`,
+                showConfirmButton: false,
+                timer: 2500,
+                timerProgressBar: true,
+                background: '#4CAF50',
+                color: 'white',
+                customClass: {
+                    popup: 'shadow-lg rounded-3'
+                }
+            });
         }
 
         // Filter santri saat mengetik di kolom pencarian modal

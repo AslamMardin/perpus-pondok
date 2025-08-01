@@ -13,7 +13,6 @@
     </a>
     <a class="nav-link {{ request()->routeIs('rak.*') ? 'active' : '' }}" href="{{ route('rak.index') }}">
         <i class="fas fa-archive"></i> Rak Buku
-        Rak
     </a>
     <a class="nav-link {{ request()->routeIs('peminjaman.*') ? 'active' : '' }}" href="{{ route('peminjaman.index') }}">
         <i class="fas fa-hand-holding"></i>
